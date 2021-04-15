@@ -58,7 +58,6 @@ module.exports = (sequelize, DataTypes) => {
       sheetsURL: {
         type: DataTypes.STRING,
         unique: true,
-        field: "sheets_url",
         validate: {
           isURL: {
             msg: "user.invalidSheetsURL",
@@ -71,6 +70,7 @@ module.exports = (sequelize, DataTypes) => {
             ],
           },
         },
+        field: "sheets_url",
       },
       password: {
         type: DataTypes.STRING,

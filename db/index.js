@@ -8,6 +8,8 @@ const UserModel = require("./models/user.js");
 // Database environment config
 const env = process.env.NODE_ENV || "development";
 
+let sequelize;
+
 if (env !== "production") {
   sequelize = new Sequelize(
     process.env.DATABASE,
