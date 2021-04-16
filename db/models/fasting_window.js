@@ -1,8 +1,8 @@
 "use strict";
 
 module.exports = (sequelize, DataTypes) => {
-  const Fasting = sequelize.define(
-    "fasting",
+  const FastingWindow = sequelize.define(
+    "fasting_window",
     {
       date: {
         type: DataTypes.DATEONLY,
@@ -49,11 +49,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       timestamps: true,
       paranoid: true,
-      freezeTableName: true,
     },
 
-    { tableName: "fasting" }
+    { tableName: "fasting_window" }
   );
 
-  return Fasting;
+  return FastingWindow;
 };

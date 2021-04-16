@@ -5,7 +5,7 @@ const Sequelize = require("sequelize");
 // Models
 const AccomplishmentModel = require("./models/accomplishment.js");
 const BeliefModel = require("./models/belief.js");
-const FastingModel = require("./models/fasting.js");
+const FastingWindowModel = require("./models/fasting_window.js");
 const HabitModel = require("./models/habit.js");
 const MilestoneModel = require("./models/milestone.js");
 const MomentModel = require("./models/moment.js");
@@ -41,7 +41,7 @@ if (env !== "production") {
 
 const Accomplishment = AccomplishmentModel(sequelize, Sequelize);
 const Belief = BeliefModel(sequelize, Sequelize);
-const Fasting = FastingModel(sequelize, Sequelize);
+const FastingWindow = FastingWindowModel(sequelize, Sequelize);
 const Habit = HabitModel(sequelize, Sequelize);
 const Milestone = MilestoneModel(sequelize, Sequelize);
 const Moment = MomentModel(sequelize, Sequelize);
@@ -52,6 +52,24 @@ const System = SystemModel(sequelize, Sequelize);
 const User = UserModel(sequelize, Sequelize);
 
 // Relationships
+User.hasMany(Accomplishment);
+User.hasMany(Belief);
+User.hasMany(FastingWindow);
+User.hasMany(Habit);
+User.hasMany(Milestone);
+User.hasMany(Moment);
+User.hasMany(Skill);
+User.hasMany(Sleep);
+User.hasMany(System);
+Accomplishment.belongsTo(User);
+Belief.belongsTo(User);
+FastingWindow.belongsTo(User);
+Habit.belongsTo(User);
+Milestone.belongsTo(User);
+Moment.belongsTo(User);
+Skill.belongsTo(User);
+Sleep.belongsTo(User);
+System.belongsTo(User);
 
 // Authenticate db and log connection or err
 sequelize
@@ -64,7 +82,7 @@ module.exports = {
   Sequelize,
   Accomplishment,
   Belief,
-  Fasting,
+  FastingWindow,
   Habit,
   Milestone,
   Moment,
