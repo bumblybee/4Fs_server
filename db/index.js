@@ -12,6 +12,7 @@ const MomentModel = require("./models/moment.js");
 const ResourceModel = require("./models/resource.js");
 const SkillModel = require("./models/skill.js");
 const SleepModel = require("./models/sleep.js");
+const SystemModel = require("./models/system.js");
 const UserModel = require("./models/user.js");
 
 // Database environment config
@@ -24,7 +25,7 @@ if (env !== "production") {
     process.env.DATABASE,
     process.env.DATABASE_USER,
     process.env.DATABASE_PASSWORD,
-    { dialect: "postgres", logging: false }
+    { dialect: "postgres", logging: false, port: 5433 }
   );
 } else {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
@@ -55,7 +56,7 @@ const User = UserModel(sequelize, Sequelize);
 // Authenticate db and log connection or err
 sequelize
   .authenticate()
-  .then(() => console.log("Database connected..."))
+  .then(() => console.log("~~Database connected~~"))
   .catch((err) => console.log("Error:" + err));
 
 module.exports = {
