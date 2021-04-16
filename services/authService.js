@@ -1,5 +1,4 @@
 const User = require("../db").User;
-const roles = require("../enums/roles");
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 const crypto = require("crypto");
@@ -7,8 +6,8 @@ const crypto = require("crypto");
 exports.generateJWT = (user) => {
   const data = {
     id: user.id,
-    firstName: user.firstName,
-    lastName: user.lastName,
+    first_name: user.first_name,
+    last_name: user.last_name,
     email: user.email,
   };
 
@@ -60,6 +59,7 @@ exports.generateJWT = (user) => {
 
 //TODO: pass user object from controller
 exports.signupUser = async (user) => {
+  console.log(user);
   const { email, password } = user;
   const existingCredentials = await User.findOne({
     where: { email },
@@ -109,7 +109,11 @@ exports.loginUser = async (email, password) => {
   const jwt = this.generateJWT(userRecord);
 
   // Pull password out of user record
-  const { password, ...userData } = userRecord;
+  const userData = {
+    firstName: userRecord.firstName,
+    lastName: userRecord.lastName,
+    email: userRecord.email,
+  };
 
   return {
     jwt,

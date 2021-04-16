@@ -11,7 +11,6 @@ exports.signupUser = async (req, res) => {
 
     res.status(201).json({ data: userData });
   } else {
-    console.log("error");
     // TODO: Custom Error
   }
 };
@@ -28,6 +27,6 @@ exports.loginUser = async (req, res) => {
   if (userData) {
     res.status(200).json({ data: userData });
   } else {
-    res.json({ error });
+    res.json(error);
   }
 };
