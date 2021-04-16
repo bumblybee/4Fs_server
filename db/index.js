@@ -3,6 +3,13 @@
 const Sequelize = require("sequelize");
 
 // Models
+const AccomplishmentModel = require("./models/accomplishment.js");
+const BeliefModel = require("./models/belief.js");
+const MilestoneModel = require("./models/milestone.js");
+const MomentModel = require("./models/moment.js");
+const ResourceModel = require("./models/resource.js");
+const SkillModel = require("./models/skill.js");
+const SleepModel = require("./models/sleep.js");
 const UserModel = require("./models/user.js");
 
 // Database environment config
@@ -29,6 +36,13 @@ if (env !== "production") {
   });
 }
 
+const Accomplishment = AccomplishmentModel(sequelize, Sequelize);
+const Belief = BeliefModel(sequelize, Sequelize);
+const Milestone = MilestoneModel(sequelize, Sequelize);
+const Moment = MomentModel(sequelize, Sequelize);
+const Resource = ResourceModel(sequelize, Sequelize);
+const Skill = SkillModel(sequelize, Sequelize);
+const Sleep = SleepModel(sequelize, Sequelize);
 const User = UserModel(sequelize, Sequelize);
 
 // Relationships
@@ -42,5 +56,12 @@ sequelize
 module.exports = {
   sequelize,
   Sequelize,
+  Accomplishment,
+  Belief,
+  Milestone,
+  Moment,
+  Resource,
+  Skill,
+  Sleep,
   User,
 };
