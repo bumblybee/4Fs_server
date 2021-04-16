@@ -5,6 +5,8 @@ const Sequelize = require("sequelize");
 // Models
 const AccomplishmentModel = require("./models/accomplishment.js");
 const BeliefModel = require("./models/belief.js");
+const FastingModel = require("./models/fasting.js");
+const HabitModel = require("./models/habit.js");
 const MilestoneModel = require("./models/milestone.js");
 const MomentModel = require("./models/moment.js");
 const ResourceModel = require("./models/resource.js");
@@ -38,11 +40,14 @@ if (env !== "production") {
 
 const Accomplishment = AccomplishmentModel(sequelize, Sequelize);
 const Belief = BeliefModel(sequelize, Sequelize);
+const Fasting = FastingModel(sequelize, Sequelize);
+const Habit = HabitModel(sequelize, Sequelize);
 const Milestone = MilestoneModel(sequelize, Sequelize);
 const Moment = MomentModel(sequelize, Sequelize);
 const Resource = ResourceModel(sequelize, Sequelize);
 const Skill = SkillModel(sequelize, Sequelize);
 const Sleep = SleepModel(sequelize, Sequelize);
+const System = SystemModel(sequelize, Sequelize);
 const User = UserModel(sequelize, Sequelize);
 
 // Relationships
@@ -58,10 +63,13 @@ module.exports = {
   Sequelize,
   Accomplishment,
   Belief,
+  Fasting,
+  Habit,
   Milestone,
   Moment,
   Resource,
   Skill,
   Sleep,
+  System,
   User,
 };
