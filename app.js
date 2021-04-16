@@ -6,6 +6,7 @@ var logger = require("morgan");
 const errorHandlers = require("./handlers/errorHandlers");
 
 var usersRouter = require("./routes/users");
+var accomplishmentsRouter = require("./routes/accomplishments");
 
 var app = express();
 
@@ -16,6 +17,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/users", usersRouter);
+app.use("/accomplishments", accomplishmentsRouter);
 
 app.use(errorHandlers.sequelizeErrorHandler);
 app.use(errorHandlers.notFound);

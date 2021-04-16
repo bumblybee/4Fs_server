@@ -2,7 +2,7 @@
 
 const { Op } = require("sequelize");
 
-export const getOne = (model) => async (req, res) => {
+exports.getOne = (model) => async (req, res) => {
   const id = req.params.id;
   const userId = req.body.userId;
 
@@ -15,7 +15,7 @@ export const getOne = (model) => async (req, res) => {
   res.status(200).json({ data: record });
 };
 
-export const getMany = (model) => async (req, res) => {
+exports.getMany = (model) => async (req, res) => {
   const userId = req.body.userId;
 
   const records = await model.findAll({ where: { userId } });
@@ -27,14 +27,12 @@ export const getMany = (model) => async (req, res) => {
   res.status(200).json({ data: records });
 };
 
-export const createOne = (model) => async (req, res) => {
-  const userId = req.body.userId;
-  const record = model.create({ ...req.body, userId });
-
+exports.createOne = (model) => async (req, res) => {
+  const record = await model.create(req.body);
   res.status(201).json({ data: record });
 };
 
-export const updateOne = (model) => async (req, res) => {
+exports.updateOne = (model) => async (req, res) => {
   const id = req.params.id;
   // const userId = req.token.data.id;
 
@@ -49,7 +47,7 @@ export const updateOne = (model) => async (req, res) => {
   res.status(201).json({ data: record });
 };
 
-export const deleteOne = (model) => async (req, res) => {
+exports.deleteOne = (model) => async (req, res) => {
   const id = req.params.id;
   const userId = req.body.userId;
   const record = await model.update(
@@ -68,10 +66,10 @@ export const deleteOne = (model) => async (req, res) => {
   res.status(200).json({ data: record });
 };
 
-export const crudControllers = (model) => ({
-  getOne: getOne(model),
-  getMany: getMany(model),
-  createOne: createOne(model),
-  updateOne: updateOne(model),
-  deleteOne: deleteOne(model),
+exports.crudControllers = (model) => ({
+  getOne: this.getOne(model),
+  getMany: this.getMany(model),
+  createOne: this.createOne(model),
+  updateOne: this.updateOne(model),
+  deleteOne: this.deleteOne(model),
 });

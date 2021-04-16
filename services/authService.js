@@ -59,7 +59,6 @@ exports.generateJWT = (user) => {
 
 //TODO: pass user object from controller
 exports.signupUser = async (user) => {
-  console.log(user);
   const { email, password } = user;
   const existingCredentials = await User.findOne({
     where: { email },
@@ -82,7 +81,15 @@ exports.signupUser = async (user) => {
       const jwt = this.generateJWT(createdUser);
 
       // Pull password out of createdUser before sending
-      const { password, ...userData } = createdUser;
+      const userData = {
+        firstName: createdUser.firstName,
+        lastName: createdUser.lastName,
+        email: createdUser.email,
+        age: createdUser.age,
+        height: createdUser.height,
+        weight: createdUser.weight,
+        gender: createdUser.gender,
+      };
 
       return { jwt, userData };
     } else {

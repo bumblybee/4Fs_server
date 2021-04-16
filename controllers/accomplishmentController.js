@@ -1,7 +1,7 @@
-import { crudControllers } from "../utils/crud/crudControllers";
-import { Accomplishment } from "../db";
+const { crudControllers } = require("../utils/crud/crudControllers");
+const { Accomplishment } = require("../db");
 
-export default crudControllers(Accomplishment);
+module.exports = crudControllers(Accomplishment);
 
 /* 
 Example overwriting or adding to generic controllers
