@@ -1,54 +1,22 @@
-const milestones = [
+exports.users = [
   {
-    body:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
+    firstName: "Peter",
+    lastName: "Griffin",
+    email: "peter@gmail.com",
+    password: "asdjn454",
+    age: 55,
+    height: 67,
+    weight: 178,
+    gender: "male",
   },
   {
-    body:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    body:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    body:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  },
-  {
-    body:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia, ex.",
-  },
-  {
-    body:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    body:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    body:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia, ex.!",
-  },
-  {
-    body:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  },
-  {
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    firstName: "Lois",
+    lastName: "Griffin",
+    email: "lois@gmail.com",
+    password: "dafdsfd#453",
+    age: 49,
+    height: 63,
+    weight: 127,
+    gender: "female",
   },
 ];
-
-exports.generateUserMilestones = function (id) {
-  return milestones.map((item) => {
-    item["userId"] = id;
-    return milestones;
-  });
-};

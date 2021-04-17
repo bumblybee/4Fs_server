@@ -23,7 +23,6 @@ exports.generateJWT = (user) => {
   });
 };
 
-//TODO: pass user object from controller
 exports.signupUser = async (user) => {
   const { email, password } = user;
   const existingCredentials = await User.findOne({
@@ -68,15 +67,18 @@ exports.signupUser = async (user) => {
   }
 };
 
-exports.loginUser = async (email, password) => {
-  const userRecord = await User.findOne({ where: { email: email } });
+exports.loginUser = async (user) => {
+  const userRecord = await User.findOne({ where: { email: user.email } });
 
   if (!userRecord) {
     // Handle login failure
     throw new Error("auth.invalidCredentials", "LoginError", 403);
   }
 
-  const correctPassword = await argon2.verify(userRecord.password, password);
+  const correctPassword = await argon2.verify(
+    userRecord.password,
+    user.password
+  );
 
   // Handle incorrect password
   if (!correctPassword) {

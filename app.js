@@ -3,12 +3,24 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const cors = require("cors");
 const errorHandlers = require("./handlers/errorHandlers");
+const { isAuth } = require("./middleware/isAuth");
 
-var usersRouter = require("./routes/users");
-var accomplishmentsRouter = require("./routes/accomplishments");
+const exampleRouter = require("./routes/example");
+const usersRouter = require("./routes/users");
+const milestonesRouter = require("./routes/milestones");
+const accomplishmentsRouter = require("./routes/accomplishments");
 
-var app = express();
+const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+
+    credentials: true,
+  })
+);
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -16,7 +28,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use("/example", exampleRouter);
+
 app.use("/users", usersRouter);
+app.use("/milestones", isAuth, milestonesRouter);
 app.use("/accomplishments", accomplishmentsRouter);
 
 app.use(errorHandlers.sequelizeErrorHandler);

@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 
 exports.getOne = (model) => async (req, res) => {
   const id = req.params.id;
-  const userId = req.body.userId;
+  const { id: userId } = req.token.data;
 
   const record = await model.findOne({ where: { id, userId } });
 
@@ -16,9 +16,21 @@ exports.getOne = (model) => async (req, res) => {
 };
 
 exports.getMany = (model) => async (req, res) => {
-  const userId = req.body.userId;
+  const { id: userId } = req.token.data;
 
-  const records = await model.findAll({ where: { userId } });
+  const records = await model.findAll({
+    where: { [Op.and]: [{ userId }, { isDeleted: false }] },
+    attributes: {
+      exclude: [
+        "userId",
+        "isShared",
+        "isDeleted",
+        "createdAt",
+        "updatedAt",
+        "deletedAt",
+      ],
+    },
+  });
 
   if (!records) {
     res.status(404).json({ message: "record.notFound" });
@@ -28,13 +40,14 @@ exports.getMany = (model) => async (req, res) => {
 };
 
 exports.createOne = (model) => async (req, res) => {
-  const record = await model.create(req.body);
+  const { id: userId } = req.token.data;
+  const record = await model.create({ ...req.body, userId });
   res.status(201).json({ data: record });
 };
 
 exports.updateOne = (model) => async (req, res) => {
   const id = req.params.id;
-  // const userId = req.token.data.id;
+  const { id: userId } = req.token.data;
 
   const record = await model.update(req.body, {
     where: { id: id, userId: req.body.userId },
