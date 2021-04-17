@@ -1,4 +1,4 @@
-// TODO: If sticking with generic controllers, make sure to add userId to all relevant fns
+// TODO: If sticking with generic controllers, make sure to add user id from token to all relevant fns
 
 const { Op } = require("sequelize");
 

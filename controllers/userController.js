@@ -2,14 +2,16 @@ const authService = require("../services/authService");
 const { COOKIE_CONFIG } = require("../config/cookieConfig");
 
 exports.signupUser = async (req, res) => {
-  //   const { username, email, password } = req.body;
+  // const { username, email, password } = req.body;
 
-  const { jwt, userData } = await authService.signupUser(req.body);
+  const { jwt, userData, createdMilestones } = await authService.signupUser(
+    req.body
+  );
 
   if (userData) {
     res.cookie("_4fs", jwt, COOKIE_CONFIG);
-
-    res.status(201).json({ data: userData });
+    //TODO: don't need to return milestones in prod
+    res.status(201).json({ data: userData, milestones: createdMilestones });
   } else {
     // TODO: Custom Error
   }

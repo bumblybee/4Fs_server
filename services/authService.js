@@ -2,6 +2,10 @@ const User = require("../db").User;
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 const crypto = require("crypto");
+const { Milestone } = require("../db");
+const {
+  generateUserMilestones,
+} = require("../utils/milestones/milestonesGenerator");
 
 exports.generateJWT = (user) => {
   const data = {
@@ -18,44 +22,6 @@ exports.generateJWT = (user) => {
     expiresIn: expiration,
   });
 };
-
-// exports.getUser = async (id) => {
-//   const user = await User.findOne({
-//     where: { id },
-//     attributes: ["id", "first_name", "last_name", "email", "isAdmin"],
-//     include: [
-
-//     ],
-//   });
-
-//   if (user) {
-//     return user;
-//   } else {
-//     return { user: null };
-//   }
-// };
-
-// exports.createAdminUser = async (username, email, password) => {
-//   const hash = await argon2.hash(password);
-
-//   const newAdmin = {
-//     first_name,
-//     email,
-//     password: hash,
-//     role: roles.Admin,
-//   };
-
-//   const adminUser = await User.create(newAdmin);
-
-//   const createdAdminUser = {
-//     id: adminUser.id,
-//     username: adminUser.username,
-//     email: adminUser.email,
-//     isAdmin: true,
-//   };
-
-//   return createdAdminUser;
-// };
 
 //TODO: pass user object from controller
 exports.signupUser = async (user) => {
@@ -80,6 +46,10 @@ exports.signupUser = async (user) => {
     if (createdUser) {
       const jwt = this.generateJWT(createdUser);
 
+      const userMilestones = generateUserMilestones(createdUser.id);
+
+      const createdMilestones = await Milestone.bulkCreate(...userMilestones);
+
       // Pull password out of createdUser before sending
       const userData = {
         firstName: createdUser.firstName,
@@ -91,7 +61,7 @@ exports.signupUser = async (user) => {
         gender: createdUser.gender,
       };
 
-      return { jwt, userData };
+      return { jwt, userData, createdMilestones };
     } else {
       throw new Error("auth.failedSignup", "SignupError", 401);
     }
