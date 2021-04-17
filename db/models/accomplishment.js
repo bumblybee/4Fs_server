@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   const Accomplishment = sequelize.define(
     "accomplishment",
     {
-      body: {
+      accomplishment: {
         type: DataTypes.STRING,
         allowNull: false,
         field: "body",

@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   const Skill = sequelize.define(
     "skill",
     {
-      body: {
+      skill: {
         type: DataTypes.STRING,
         allowNull: false,
         field: "body",

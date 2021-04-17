@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   const Moment = sequelize.define(
     "moment",
     {
-      body: {
+      moment: {
         type: DataTypes.STRING,
         allowNull: false,
         field: "body",

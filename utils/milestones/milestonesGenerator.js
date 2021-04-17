@@ -1,48 +1,48 @@
 const milestones = [
   {
-    body:
+    milestone:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
-    body:
+    milestone:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
-    body:
+    milestone:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
-    body:
+    milestone:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    milestone: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
   },
   {
-    body:
+    milestone:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia, ex.",
   },
   {
-    body:
+    milestone:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
-    body:
+    milestone:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
-    body:
+    milestone:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia, ex.!",
   },
   {
-    body:
+    milestone:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    milestone: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
   },
   {
-    body: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    milestone: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
   },
 ];
 
