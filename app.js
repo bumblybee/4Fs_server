@@ -9,8 +9,9 @@ const { isAuth } = require("./middleware/isAuth");
 
 const exampleRouter = require("./routes/example");
 const usersRouter = require("./routes/users");
-const milestonesRouter = require("./routes/milestones");
 const accomplishmentsRouter = require("./routes/accomplishments");
+const beliefsRouter = require("./routes/beliefs");
+const milestonesRouter = require("./routes/milestones");
 
 const app = express();
 
@@ -31,8 +32,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/example", exampleRouter);
 
 app.use("/users", usersRouter);
-app.use("/milestones", isAuth, milestonesRouter);
 app.use("/accomplishments", accomplishmentsRouter);
+app.use("/beliefs", isAuth, beliefsRouter);
+app.use("/milestones", isAuth, milestonesRouter);
 
 app.use(errorHandlers.sequelizeErrorHandler);
 app.use(errorHandlers.notFound);
