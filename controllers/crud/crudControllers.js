@@ -1,4 +1,4 @@
-// TODO: If sticking with generic controllers, make sure to add user id from token to all relevant fns
+// TODO: Need to send isShared to client
 
 const { Op } = require("sequelize");
 
@@ -8,6 +8,16 @@ exports.getOne = (model) => async (req, res) => {
 
   const record = await model.findOne({
     where: { [Op.and]: [{ userId }, { id }, { isDeleted: false }] },
+    attributes: {
+      exclude: [
+        "userId",
+        "isShared",
+        "isDeleted",
+        "createdAt",
+        "updatedAt",
+        "deletedAt",
+      ],
+    },
   });
 
   if (!record) {
