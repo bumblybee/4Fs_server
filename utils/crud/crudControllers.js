@@ -6,7 +6,9 @@ exports.getOne = (model) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
 
-  const record = await model.findOne({ where: { id, userId } });
+  const record = await model.findOne({
+    where: { [Op.and]: [{ userId }, { id }, { isDeleted: false }] },
+  });
 
   if (!record) {
     res.status(404).json({ message: "record.notFound" });
@@ -50,7 +52,7 @@ exports.updateOne = (model) => async (req, res) => {
   const { id: userId } = req.token.data;
 
   const record = await model.update(req.body, {
-    where: { id: id, userId: req.body.userId },
+    where: { id, userId },
     returning: true,
     plain: true,
   });
@@ -62,7 +64,8 @@ exports.updateOne = (model) => async (req, res) => {
 
 exports.deleteOne = (model) => async (req, res) => {
   const id = req.params.id;
-  const userId = req.body.userId;
+  const { id: userId } = req.token.data;
+
   const record = await model.update(
     { isDeleted: true },
     {
