@@ -1,4 +1,4 @@
-const { crudControllers } = require("../utils/crud/crudControllers");
+const { crudControllers } = require("./crud/crudControllers");
 const { Accomplishment } = require("../db");
 
 module.exports = crudControllers(Accomplishment);
