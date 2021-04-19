@@ -43,6 +43,7 @@ app.use("/habits", isAuth, habitsRouter);
 app.use("/milestones", isAuth, milestonesRouter);
 app.use("/moments", isAuth, momentsRouter);
 app.use("/resources", isAuth, resourcesRouter);
+app.use("/skills", isAuth, skillsRouter);
 
 app.use(errorHandlers.sequelizeErrorHandler);
 app.use(errorHandlers.notFound);
