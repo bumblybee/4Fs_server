@@ -16,6 +16,8 @@ const habitsRouter = require("./routes/habits");
 const milestonesRouter = require("./routes/milestones");
 const momentsRouter = require("./routes/moments");
 const resourcesRouter = require("./routes/resources");
+const skillsRouter = require("./routes/skills");
+const sleepRouter = require("./routes/sleep");
 
 const app = express();
 
@@ -44,6 +46,7 @@ app.use("/milestones", isAuth, milestonesRouter);
 app.use("/moments", isAuth, momentsRouter);
 app.use("/resources", isAuth, resourcesRouter);
 app.use("/skills", isAuth, skillsRouter);
+app.use("/sleep", isAuth, sleepRouter);
 
 app.use(errorHandlers.sequelizeErrorHandler);
 app.use(errorHandlers.notFound);
