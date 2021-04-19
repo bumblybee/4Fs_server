@@ -6,6 +6,8 @@ var logger = require("morgan");
 const cors = require("cors");
 const errorHandlers = require("./handlers/errorHandlers");
 const { isAuth } = require("./middleware/isAuth");
+const { authRole } = require("./middleware/authRole");
+const roles = require("./enums/roles");
 
 const exampleRouter = require("./routes/example");
 const adminRouter = require("./routes/admin");
@@ -39,7 +41,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/example", exampleRouter);
 
-app.use("/admin", isAuth, adminRouter);
+app.use("/admin", [isAuth, authRole(roles.Admin)], adminRouter);
 app.use("/users", usersRouter);
 
 app.use("/accomplishments", isAuth, accomplishmentsRouter);
