@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controllers = require("../controllers/resourceController");
+const controllers = require("../controllers/resourcesController");
 const { errorWrapper } = require("../handlers/errorHandlers");
 
 router

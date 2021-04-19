@@ -8,6 +8,7 @@ const errorHandlers = require("./handlers/errorHandlers");
 const { isAuth } = require("./middleware/isAuth");
 
 const exampleRouter = require("./routes/example");
+const adminRouter = require("./routes/admin");
 const usersRouter = require("./routes/users");
 const accomplishmentsRouter = require("./routes/accomplishments");
 const beliefsRouter = require("./routes/beliefs");
@@ -38,8 +39,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/example", exampleRouter);
 
+app.use("/admin", isAuth, adminRouter);
 app.use("/users", usersRouter);
-app.use("/accomplishments", accomplishmentsRouter);
+
+app.use("/accomplishments", isAuth, accomplishmentsRouter);
 app.use("/beliefs", isAuth, beliefsRouter);
 app.use("/fasting-window", isAuth, fastingWindowRouter);
 app.use("/habits", isAuth, habitsRouter);

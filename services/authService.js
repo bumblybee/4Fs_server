@@ -13,6 +13,7 @@ exports.generateJWT = (user) => {
     first_name: user.first_name,
     last_name: user.last_name,
     email: user.email,
+    isAdmin: user.isAdmin,
   };
 
   const secret = Buffer.from(process.env.JWT_SECRET, "base64");
