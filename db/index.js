@@ -5,7 +5,7 @@ const Sequelize = require("sequelize");
 // Models
 const AccomplishmentModel = require("./models/accomplishment.js");
 const BeliefModel = require("./models/belief.js");
-const FastingWindowModel = require("./models/fasting_window.js");
+const FastingWindowModel = require("./models/fastingWindow.js");
 const HabitModel = require("./models/habit.js");
 const MilestoneModel = require("./models/milestone.js");
 const MomentModel = require("./models/moment.js");

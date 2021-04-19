@@ -33,14 +33,7 @@ exports.getMany = (model) => async (req, res) => {
   const records = await model.findAll({
     where: { [Op.and]: [{ userId }, { isDeleted: false }] },
     attributes: {
-      exclude: [
-        "userId",
-        "isShared",
-        "isDeleted",
-        "createdAt",
-        "updatedAt",
-        "deletedAt",
-      ],
+      exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
     },
   });
 

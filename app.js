@@ -11,6 +11,7 @@ const exampleRouter = require("./routes/example");
 const usersRouter = require("./routes/users");
 const accomplishmentsRouter = require("./routes/accomplishments");
 const beliefsRouter = require("./routes/beliefs");
+const fastingWindowRouter = require("./routes/fsatingWindow");
 const milestonesRouter = require("./routes/milestones");
 
 const app = express();
@@ -34,6 +35,7 @@ app.use("/example", exampleRouter);
 app.use("/users", usersRouter);
 app.use("/accomplishments", accomplishmentsRouter);
 app.use("/beliefs", isAuth, beliefsRouter);
+app.use("/fasting-window", isAuth, fastingWindowRouter);
 app.use("/milestones", isAuth, milestonesRouter);
 
 app.use(errorHandlers.sequelizeErrorHandler);
