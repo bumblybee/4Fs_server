@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       accomplishment: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: "body",
+        field: "accomplishment",
       },
       isShared: {
         type: DataTypes.BOOLEAN,

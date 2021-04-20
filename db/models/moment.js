@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       moment: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: "body",
+        field: "moment",
       },
       isShared: {
         type: DataTypes.BOOLEAN,

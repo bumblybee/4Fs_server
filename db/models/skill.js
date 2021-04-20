@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       skill: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: "body",
+        field: "skill",
       },
       isShared: {
         type: DataTypes.BOOLEAN,

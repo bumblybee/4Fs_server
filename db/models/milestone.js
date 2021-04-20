@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       milestone: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: "body",
+        field: "milestone",
       },
       personalize: {
         type: DataTypes.STRING,

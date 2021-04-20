@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       belief: {
         type: DataTypes.STRING,
         allowNull: false,
-        field: "body",
+        field: "belief",
       },
       isShared: {
         type: DataTypes.BOOLEAN,
