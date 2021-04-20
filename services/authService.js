@@ -99,3 +99,34 @@ exports.loginUser = async (user) => {
     userData,
   };
 };
+
+exports.updateUser = async (id, changes) => {
+  const userRecord = await User.findOne({ where: { id } });
+
+  if (!userRecord) {
+    // Handle login failure
+    throw new Error("auth.userNotFound", "userError", 403);
+  }
+
+  const record = await User.update(changes, {
+    where: { id },
+    returning: true,
+    plain: true,
+  });
+
+  if (!record) {
+    throw new Error("auth.userNotFound", "userError", 403);
+  }
+
+  const userData = {
+    firstName: record[1].firstName,
+    lastName: record[1].lastName,
+    email: record[1].email,
+    weight: record[1].weight,
+    height: record[1].height,
+    age: record[1].age,
+    gender: record[1].gender,
+  };
+
+  return userData;
+};

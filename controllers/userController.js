@@ -32,3 +32,11 @@ exports.loginUser = async (req, res) => {
     res.json(error);
   }
 };
+
+exports.updateUser = async (req, res) => {
+  const { id } = req.token.data;
+
+  const record = await authService.updateUser(id, req.body);
+
+  res.status(200).json({ data: record });
+};
