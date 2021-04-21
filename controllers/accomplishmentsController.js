@@ -6,7 +6,7 @@ module.exports = crudControllers(Accomplishment);
 /* 
 Example overwriting or adding to generic controllers
 
-export default {
+module.exports = {
     * Spread default controllers so still have access
     ...crudControllers(Accomplishment),
     * Overwrite a controller function
@@ -14,7 +14,7 @@ export default {
         *do whatever needed here that differs from original controller
     }
     * Create an additional controller
-    updateAccomplishmentBasedOnX(Accomplishment) {
+    doSomethingElse(Accomplishment) {
         add code for new controller here
     }
 }

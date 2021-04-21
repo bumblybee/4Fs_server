@@ -1,5 +1,3 @@
-// TODO: Need to send isShared to client
-
 const { Op } = require("sequelize");
 
 exports.getOne = (model) => async (req, res) => {
@@ -47,6 +45,11 @@ exports.getMany = (model) => async (req, res) => {
 exports.createOne = (model) => async (req, res) => {
   const { id: userId } = req.token.data;
   const record = await model.create({ ...req.body, userId });
+
+  if (!record) {
+    res.status(404).json({ message: "record.notFound" });
+  }
+
   res.status(201).json({ data: record });
 };
 
