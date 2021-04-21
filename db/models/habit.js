@@ -4,14 +4,13 @@ module.exports = (sequelize, DataTypes) => {
   const Habit = sequelize.define(
     "habit",
     {
-      habit_goal: {
+      habitGoal: {
         type: DataTypes.STRING,
         allowNull: false,
         field: "habit_goal",
       },
       reward: {
         type: DataTypes.STRING,
-        allowNull: false,
         field: "reward",
       },
       isShared: {

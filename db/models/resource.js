@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   const Resource = sequelize.define(
     "resource",
     {
-      resourceURL: {
+      url: {
         type: DataTypes.STRING,
         unique: true,
         validate: {
