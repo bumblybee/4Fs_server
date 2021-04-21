@@ -55,6 +55,7 @@ exports.createOne = (model) => async (req, res) => {
 
 exports.updateOne = (model) => async (req, res) => {
   const id = req.params.id;
+
   const { id: userId } = req.token.data;
 
   const record = await model.update(req.body, {
@@ -66,6 +67,27 @@ exports.updateOne = (model) => async (req, res) => {
     res.status(404).json({ message: "record.notFound" });
   }
   res.status(201).json({ data: record[1] });
+};
+
+exports.updateOrCreate = (model) => async (req, res) => {
+  const id = req.params.id;
+  const { id: userId } = req.token.data;
+
+  if (id === "undefined") {
+    const record = await model.create({ ...req.body, userId });
+    res.status(201).json({ data: record });
+    return;
+  } else {
+    const record = await model.update(req.body, {
+      where: { [Op.and]: [{ id }, { userId }] },
+      returning: true,
+      plain: true,
+    });
+    if (!record) {
+      res.status(404).json({ message: "record.notFound" });
+    }
+    res.status(201).json({ data: record[1] });
+  }
 };
 
 exports.deleteOne = (model) => async (req, res) => {
@@ -93,5 +115,6 @@ exports.crudControllers = (model) => ({
   getMany: this.getMany(model),
   createOne: this.createOne(model),
   updateOne: this.updateOne(model),
+  updateOrCreate: this.updateOrCreate(model),
   deleteOne: this.deleteOne(model),
 });

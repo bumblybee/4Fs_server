@@ -10,11 +10,11 @@ module.exports = {
     * Spread default controllers so still have access
     ...crudControllers(Accomplishment),
     * Overwrite a controller function
-    getOne(Accomplishment){
+    getOne(){
         *do whatever needed here that differs from original controller
     }
     * Create an additional controller
-    doSomethingElse(Accomplishment) {
+    doSomethingElse() {
         add code for new controller here
     }
 }
