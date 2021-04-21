@@ -8,6 +8,6 @@ router.route("/").get(controllers.getMany);
 router
   .route("/:id")
   .put(errorWrapper(controllers.updateOne))
-  .post(errorWrapper(controllers.deleteOne));
+  .delete(errorWrapper(controllers.deleteOne));
 
 module.exports = router;

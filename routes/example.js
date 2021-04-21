@@ -6,10 +6,10 @@ const { errorWrapper } = require("../handlers/errorHandlers");
 const COOKIE_CONFIG = require("../config/cookieConfig");
 
 router.post("/", async (req, res) => {
-  const { jwt, user, createdMilestones } = await signupUser(users[0]);
+  const { jwt, userData, createdMilestones } = await signupUser(users[0]);
   res.cookie("_4fs", jwt, COOKIE_CONFIG);
 
-  res.status(201).json({ data: user, milestones: createdMilestones });
+  res.status(201).json({ data: userData, milestones: createdMilestones });
 });
 
 router.post("/login", async (req, res) => {

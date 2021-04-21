@@ -1,48 +1,48 @@
 const milestones = [
   {
     milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
+      "1)Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
     milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
+      "2)Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
     milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
+      "3)Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
     milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
+      "4)Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
-    milestone: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  },
-  {
-    milestone:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia, ex.",
+    milestone: "5)Lorem ipsum dolor sit amet consectetur adipisicing elit.",
   },
   {
     milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
+      "6)Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia, ex.",
   },
   {
     milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
+      "7)Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
     milestone:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia, ex.!",
+      "8)Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
     milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
+      "9)Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia, ex.!",
   },
   {
-    milestone: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    milestone:
+      "10)Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
   },
   {
-    milestone: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    milestone: "11)Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+  },
+  {
+    milestone: "12)Lorem ipsum dolor sit amet consectetur adipisicing elit.",
   },
 ];
 
