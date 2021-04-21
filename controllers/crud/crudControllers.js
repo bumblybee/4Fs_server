@@ -33,6 +33,7 @@ exports.getMany = (model) => async (req, res) => {
     attributes: {
       exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
     },
+    order: [["createdAt", "ASC"]],
   });
 
   if (!records) {

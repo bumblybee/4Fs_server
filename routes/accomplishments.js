@@ -11,6 +11,7 @@ router
 router
   .route("/:id")
   .put(errorWrapper(controllers.updateOne))
+  .post(errorWrapper(controllers.updateOrCreate))
   .delete(errorWrapper(controllers.deleteOne));
 
 module.exports = router;

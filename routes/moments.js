@@ -10,6 +10,7 @@ router
 
 router
   .route("/:id")
+  .post(errorWrapper(controllers.updateOrCreate))
   .put(errorWrapper(controllers.updateOne))
   .delete(errorWrapper(controllers.deleteOne));
 
