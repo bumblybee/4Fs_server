@@ -14,4 +14,6 @@ router
   .put(errorWrapper(controllers.updateOne))
   .delete(errorWrapper(controllers.deleteOne));
 
+router.route("/range").post(errorWrapper(controllers.findRange));
+
 module.exports = router;
