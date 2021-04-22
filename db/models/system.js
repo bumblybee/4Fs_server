@@ -19,6 +19,41 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: "end_date",
       },
+      dayOne: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        field: "day_one",
+      },
+      dayTwo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        field: "day_two",
+      },
+      dayThree: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        field: "day_three",
+      },
+      dayFour: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        field: "day_four",
+      },
+      dayFive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        field: "day_five",
+      },
+      daySix: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        field: "day_six",
+      },
+      daySeven: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        field: "day_seven",
+      },
       goal: {
         type: DataTypes.INTEGER,
         allowNull: false,

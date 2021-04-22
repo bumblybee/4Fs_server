@@ -87,7 +87,7 @@ exports.loginUser = async (user) => {
 
   const jwt = this.generateJWT(userRecord);
 
-  // Pull password out of user record
+  // Remove password from user record
   const userData = {
     firstName: userRecord.firstName,
     lastName: userRecord.lastName,

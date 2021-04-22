@@ -74,7 +74,7 @@ exports.updateOrCreate = (model) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
 
-  if (id === "undefined") {
+  if (!id) {
     const record = await model.create({ ...req.body, userId });
     res.status(201).json({ data: record });
     return;
