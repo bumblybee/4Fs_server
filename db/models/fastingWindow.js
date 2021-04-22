@@ -9,12 +9,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: "date",
       },
-      goal_window: {
+      goalWindow: {
         type: DataTypes.INTEGER,
         allowNull: false,
         field: "goal_window",
       },
-      today_window: {
+      todayWindow: {
         type: DataTypes.INTEGER,
         allowNull: false,
         field: "today_window",
@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       performed: {
         type: DataTypes.Sequelize.DECIMAL(10, 2),
         field: "performed",
+        allowNull: false,
       },
       isShared: {
         type: DataTypes.BOOLEAN,

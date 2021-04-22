@@ -9,17 +9,17 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: "date",
       },
-      to_bed: {
+      toBed: {
         type: DataTypes.TIME,
         allowNull: false,
         field: "to_bed",
       },
-      to_bed: {
+      woke: {
         type: DataTypes.TIME,
         allowNull: false,
         field: "woke",
       },
-      hours_slept: {
+      hoursSlept: {
         type: DataTypes.INTEGER,
         allowNull: false,
         field: "hours_slept",
