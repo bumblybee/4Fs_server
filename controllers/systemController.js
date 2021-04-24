@@ -1,22 +1,22 @@
 const { crudControllers } = require("./crud/crudControllers");
 const { System } = require("../db");
 const { Op } = require("sequelize");
+const moment = require("moment");
 
 module.exports = {
   ...crudControllers(System),
 
-  async getRange(req, res) {
+  async findWeek(req, res) {
     try {
       const { id: userId } = req.token.data;
-
+      console.log(req.body);
       const records = await System.findAll({
         where: {
           [Op.and]: [
             { userId },
             { isDeleted: false },
             {
-              startDate: { [Op.gte]: req.body.startDate },
-              endDate: { [Op.lte]: req.body.endDate },
+              startDate: req.body.startDate,
             },
           ],
         },

@@ -14,11 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: "start_date",
       },
-      endDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: false,
-        field: "end_date",
-      },
       dayOne: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
@@ -61,6 +56,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       performed: {
         type: DataTypes.INTEGER,
+        defaultValue: 0,
         field: "performed",
       },
       isShared: {

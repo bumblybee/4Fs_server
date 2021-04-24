@@ -3,6 +3,8 @@ const router = express.Router();
 const controllers = require("../controllers/systemController");
 const { errorWrapper } = require("../handlers/errorHandlers");
 
+router.route("/week").post(errorWrapper(controllers.findWeek));
+
 router
   .route("/")
   .get(controllers.getMany)
@@ -13,7 +15,5 @@ router
   .post(errorWrapper(controllers.updateOrCreate))
   .put(errorWrapper(controllers.updateOne))
   .delete(errorWrapper(controllers.deleteOne));
-
-router.route("/range").post(errorWrapper(controllers.findRange));
 
 module.exports = router;

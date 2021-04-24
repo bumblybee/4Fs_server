@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
         field: "comments",
       },
       status: {
-        type: DataTypes.ENUM("in progress", "complete"),
-        defaultValue: "in progress",
+        type: DataTypes.ENUM("In Progress", "Complete"),
+        defaultValue: "In Progress",
         field: "status",
       },
       isShared: {
