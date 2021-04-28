@@ -51,7 +51,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       goal: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         field: "goal",
       },
       performed: {

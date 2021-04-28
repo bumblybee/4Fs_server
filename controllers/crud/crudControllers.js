@@ -104,11 +104,19 @@ exports.deleteOne = (model) => async (req, res) => {
     }
   );
 
+  const recordsWithRecordRemoved = await model.findAll({
+    where: { [Op.and]: [{ userId }, { isDeleted: false }] },
+    attributes: {
+      exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
+    },
+    order: [["createdAt", "ASC"]],
+  });
+
   if (!record) {
     res.status(404).json({ message: "record.notFound" });
   }
 
-  res.status(200).json({ data: record });
+  res.status(200).json({ data: recordsWithRecordRemoved, deleted: record });
 };
 
 exports.crudControllers = (model) => ({
