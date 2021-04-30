@@ -6,12 +6,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       practice: {
         type: DataTypes.STRING,
-        allowNull: false,
         field: "practice",
       },
       startDate: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
         field: "start_date",
       },
       dayOne: {
