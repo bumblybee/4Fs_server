@@ -6,6 +6,7 @@ const { Milestone } = require("../db");
 const {
   generateUserMilestones,
 } = require("../utils/milestones/milestonesGenerator");
+const { CustomError } = require("../handlers/errorHandlers");
 
 exports.generateJWT = (user) => {
   const data = {
@@ -74,7 +75,7 @@ exports.loginUser = async (user) => {
 
   if (!userRecord) {
     // Handle login failure
-    throw new Error("auth.invalidCredentials", "LoginError", 403);
+    throw new CustomError("auth.invalidCredentials", "LoginError", 403);
   }
 
   const correctPassword = await argon2.verify(userRecord.password, password);

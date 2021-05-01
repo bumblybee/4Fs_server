@@ -9,7 +9,7 @@ const {
 const { errorWrapper } = require("../handlers/errorHandlers");
 
 router.post("/signup", errorWrapper(signupUser));
-router.post("/login", loginUser);
+router.post("/login", errorWrapper(loginUser));
 
 router.put("/", isAuth, errorWrapper(updateUser));
 
