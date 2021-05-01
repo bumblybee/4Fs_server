@@ -68,17 +68,16 @@ exports.signupUser = async (user) => {
 };
 
 exports.loginUser = async (user) => {
-  const userRecord = await User.findOne({ where: { email: user.email } });
+  const { email, password } = user;
+
+  const userRecord = await User.findOne({ where: { email } });
 
   if (!userRecord) {
     // Handle login failure
     throw new Error("auth.invalidCredentials", "LoginError", 403);
   }
 
-  const correctPassword = await argon2.verify(
-    userRecord.password,
-    user.password
-  );
+  const correctPassword = await argon2.verify(userRecord.password, password);
 
   // Handle incorrect password
   if (!correctPassword) {

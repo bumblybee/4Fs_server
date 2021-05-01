@@ -18,11 +18,7 @@ exports.signupUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  const { email, password } = req.body;
-  const { jwt, userData } = await authService.loginWithPassword(
-    email,
-    password
-  );
+  const { jwt, userData } = await authService.loginUser(req.body);
 
   res.cookie("_4fs", jwt, COOKIE_CONFIG);
 
