@@ -24,6 +24,19 @@ exports.generateJWT = (user) => {
   });
 };
 
+exports.getUser = async (id) => {
+  const user = await User.findOne({
+    where: { id },
+    attributes: ["id", "firstName", "lastName", "email"],
+  });
+
+  if (user) {
+    return user;
+  } else {
+    throw new CustomError("auth.invalidCredentials", "userError", 401);
+  }
+};
+
 exports.signupUser = async (user) => {
   const { email, password } = user;
   const existingCredentials = await User.findOne({
@@ -31,7 +44,7 @@ exports.signupUser = async (user) => {
   });
 
   if (existingCredentials) {
-    throw new Error("auth.existingCredentials", "SignupError", 401);
+    throw new CustomError("auth.existingCredentials", "SignupError", 401);
   } else {
     const hash = await argon2.hash(password);
 

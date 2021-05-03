@@ -1,6 +1,18 @@
 const authService = require("../services/authService");
 const { COOKIE_CONFIG } = require("../config/cookieConfig");
 
+exports.getCurrentUser = async (req, res) => {
+  const { id } = req.token.data;
+
+  const user = await authService.getUser(id);
+
+  if (user) {
+    res.json({ user });
+  } else {
+    res.status(401).json({ code: "user.unauthorized" });
+  }
+};
+
 exports.signupUser = async (req, res) => {
   // const { username, email, password } = req.body;
 
