@@ -113,6 +113,22 @@ exports.loginUser = async (user) => {
   };
 };
 
+exports.validateUserEmail = async (email) => {
+  const validFormat = validateEmailFormat(email);
+
+  if (!validFormat) {
+    throw new CustomError("user.invalidEmailFormat", "SignupError", 401);
+  }
+
+  const userRecord = await User.findOne({ where: { email } });
+
+  if (!userRecord) {
+    return false;
+  } else {
+    throw new CustomError("auth.existingCredentials", "SignupError", 401);
+  }
+};
+
 exports.updateUser = async (id, changes) => {
   const userRecord = await User.findOne({ where: { id } });
 
@@ -142,4 +158,9 @@ exports.updateUser = async (id, changes) => {
   };
 
   return userData;
+};
+
+const validateEmailFormat = (email) => {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
 };

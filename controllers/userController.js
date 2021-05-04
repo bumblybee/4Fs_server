@@ -14,16 +14,12 @@ exports.getCurrentUser = async (req, res) => {
 };
 
 exports.signupUser = async (req, res) => {
-  // const { username, email, password } = req.body;
-
-  const { jwt, userData, createdMilestones } = await authService.signupUser(
-    req.body
-  );
+  const { jwt, userData } = await authService.signupUser(req.body);
 
   if (userData) {
     res.cookie("_4fs", jwt, COOKIE_CONFIG);
-    //TODO: don't need to return milestones in prod
-    res.status(201).json({ data: userData, milestones: createdMilestones });
+
+    res.status(201).json(userData);
   } else {
     // TODO: Custom Error
   }
@@ -38,6 +34,17 @@ exports.loginUser = async (req, res) => {
     res.status(200).json({ data: userData });
   } else {
     res.json(error);
+  }
+};
+
+exports.checkUserEmail = async (req, res) => {
+  const { email } = req.body;
+  const emailExists = await authService.validateUserEmail(email);
+  if (!emailExists) {
+    res.status(200).json({ code: "email.available" });
+  } else {
+    // Throwing error in authService
+    res.status(200).json({ code: "email.unavailable" });
   }
 };
 
