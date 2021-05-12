@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 const moment = require("moment");
 
 module.exports = {
-  ...crudControllers(System),
+  ...crudControllers(System, ["createdAt", "ASC"]),
 
   async findWeek(req, res) {
     try {

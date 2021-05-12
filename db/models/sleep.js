@@ -6,22 +6,18 @@ module.exports = (sequelize, DataTypes) => {
     {
       date: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
         field: "date",
       },
       toBed: {
         type: DataTypes.TIME,
-        allowNull: false,
         field: "to_bed",
       },
       woke: {
         type: DataTypes.TIME,
-        allowNull: false,
         field: "woke",
       },
       hoursSlept: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         field: "hours_slept",
       },
       comments: {

@@ -27,7 +27,7 @@ exports.generateJWT = (user) => {
 exports.getUser = async (id) => {
   const user = await User.findOne({
     where: { id },
-    attributes: ["id", "firstName", "lastName", "email"],
+    attributes: ["id", "firstName", "lastName", "email", "sheetsURL"],
   });
 
   if (user) {
@@ -114,12 +114,6 @@ exports.loginUser = async (user) => {
 };
 
 exports.validateUserEmail = async (email) => {
-  const validFormat = validateEmailFormat(email);
-
-  if (!validFormat) {
-    throw new CustomError("user.invalidEmailFormat", "SignupError", 401);
-  }
-
   const userRecord = await User.findOne({ where: { email } });
 
   if (!userRecord) {
@@ -134,7 +128,7 @@ exports.updateUser = async (id, changes) => {
 
   if (!userRecord) {
     // Handle login failure
-    throw new Error("auth.userNotFound", "userError", 403);
+    throw new CustomError("auth.userNotFound", "userError", 403);
   }
 
   const record = await User.update(changes, {
@@ -155,12 +149,8 @@ exports.updateUser = async (id, changes) => {
     height: record[1].height,
     age: record[1].age,
     gender: record[1].gender,
+    sheetsURL: record[1].sheetsURL,
   };
 
   return userData;
-};
-
-const validateEmailFormat = (email) => {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
 };

@@ -1,7 +1,7 @@
 const { crudControllers } = require("./crud/crudControllers");
 const { Accomplishment } = require("../db");
 
-module.exports = crudControllers(Accomplishment);
+module.exports = crudControllers(Accomplishment, ["createdAt", "ASC"]);
 
 /* 
 Example overwriting or adding to generic controllers

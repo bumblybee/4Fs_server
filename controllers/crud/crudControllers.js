@@ -25,7 +25,7 @@ exports.getOne = (model) => async (req, res) => {
   res.status(200).json({ data: record });
 };
 
-exports.getMany = (model) => async (req, res) => {
+exports.getMany = (model, sortOrder) => async (req, res) => {
   const { id: userId } = req.token.data;
 
   const records = await model.findAll({
@@ -33,7 +33,7 @@ exports.getMany = (model) => async (req, res) => {
     attributes: {
       exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
     },
-    order: [["createdAt", "ASC"]],
+    order: [sortOrder],
   });
 
   if (!records) {
@@ -119,9 +119,9 @@ exports.deleteOne = (model) => async (req, res) => {
   res.status(200).json({ data: recordsWithRecordRemoved, deleted: record });
 };
 
-exports.crudControllers = (model) => ({
+exports.crudControllers = (model, sortOrder) => ({
   getOne: this.getOne(model),
-  getMany: this.getMany(model),
+  getMany: this.getMany(model, sortOrder),
   createOne: this.createOne(model),
   updateOne: this.updateOne(model),
   updateOrCreate: this.updateOrCreate(model),
