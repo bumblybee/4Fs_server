@@ -113,7 +113,7 @@ exports.loginUser = async (user) => {
   };
 };
 
-exports.validateUserEmail = async (email) => {
+exports.checkIfUserEmailExists = async (email) => {
   const userRecord = await User.findOne({ where: { email } });
 
   if (!userRecord) {

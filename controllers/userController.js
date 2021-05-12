@@ -39,7 +39,7 @@ exports.loginUser = async (req, res) => {
 
 exports.checkUserEmail = async (req, res) => {
   const { email } = req.body;
-  const emailExists = await authService.validateUserEmail(email);
+  const emailExists = await authService.checkIfUserEmailExists(email);
   if (!emailExists) {
     res.status(200).json({ code: "email.available" });
   } else {
