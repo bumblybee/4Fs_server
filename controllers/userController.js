@@ -55,3 +55,15 @@ exports.updateUser = async (req, res) => {
 
   res.status(200).json({ data: record });
 };
+
+exports.generatePasswordResetLink = async (req, res) => {
+  const { email } = req.body;
+
+  const { userRecord } = authService.generatePasswordReset(email);
+
+  if (!userRecord) {
+    // TODO: Add logging noting user doesn't exist
+    console.log(userRecord);
+  }
+  res.json({ message: "An email has been sent to the address provided." });
+};

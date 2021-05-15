@@ -8,14 +8,18 @@ const {
   loginUser,
   updateUser,
   checkUserEmail,
+  generatePasswordResetLink,
 } = require("../controllers/userController");
 const { errorWrapper } = require("../handlers/errorHandlers");
 
 router.get("/current", isAuth, errorWrapper(getCurrentUser));
 
 router.post("/validate-email", errorWrapper(checkUserEmail));
+
 router.post("/signup", errorWrapper(signupUser));
 router.post("/login", errorWrapper(loginUser));
+
+router.post("/reset-password", errorWrapper(generatePasswordResetLink));
 
 router.put("/", isAuth, errorWrapper(updateUser));
 

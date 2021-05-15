@@ -2,7 +2,9 @@ const User = require("../db").User;
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 const crypto = require("crypto");
+const { RESET_PASSWORD_URL } = require("../config/passwordResetConfig");
 const { Milestone } = require("../db");
+const emailHandler = require("../handlers/emailHandler");
 const {
   generateUserMilestones,
 } = require("../utils/milestones/milestonesGenerator");
@@ -164,4 +166,29 @@ exports.updateUser = async (id, changes) => {
   };
 
   return userData;
+};
+
+exports.generatePasswordReset = async (email) => {
+  const userRecord = await User.findOne({ where: { email: email } });
+
+  const resetToken = crypto.randomBytes(25).toString("hex");
+  const resetExpiry = Date.now() + 1000 * 60 * 60;
+
+  if (userRecord) {
+    await User.update(
+      { resetPasswordToken: resetToken, resetPasswordExpiry: resetExpiry },
+      { where: { email } }
+    );
+
+    const resetPasswordUrl = `${RESET_PASSWORD_URL}/${resetToken}`;
+
+    emailHandler.sendEmail({
+      subject: "Request to Reset your Password",
+      filename: "resetPasswordEmail",
+      user: { email },
+      resetPasswordUrl,
+    });
+  }
+
+  return { userRecord };
 };

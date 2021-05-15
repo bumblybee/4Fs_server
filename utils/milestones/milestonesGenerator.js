@@ -1,7 +1,7 @@
 const milestones = [
   {
     f: "Focus",
-    milestone: "Define Goal, Identity, and Result",
+    milestone: "Define Goal, Identity, and Result.",
     personalize:
       "I (system) every day because I (name) am (new identity). My new life allows me to (enables what).",
   },
