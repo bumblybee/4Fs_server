@@ -76,7 +76,15 @@ exports.updateOrCreate = (model) => async (req, res) => {
 
   if (id === "undefined") {
     const record = await model.create({ ...req.body, userId });
-    res.status(201).json({ data: record });
+
+    const records = await model.findAll({
+      where: { [Op.and]: [{ userId }, { isDeleted: false }] },
+      attributes: {
+        exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
+      },
+    });
+
+    res.status(201).json({ newRecord: record, data: records });
     return;
   } else {
     const record = await model.update(req.body, {
@@ -84,10 +92,20 @@ exports.updateOrCreate = (model) => async (req, res) => {
       returning: true,
       plain: true,
     });
+
     if (!record) {
       res.status(404).json({ message: "record.notFound" });
+      return;
     }
-    res.status(201).json({ data: record[1] });
+
+    const records = await model.findAll({
+      where: { [Op.and]: [{ userId }, { isDeleted: false }] },
+      attributes: {
+        exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
+      },
+    });
+
+    res.status(201).json({ updatedRecord: record[1], data: records });
   }
 };
 

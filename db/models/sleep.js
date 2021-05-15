@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         field: "woke",
       },
       hoursSlept: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.TIME,
         field: "hours_slept",
       },
       comments: {

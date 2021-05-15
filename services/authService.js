@@ -27,7 +27,18 @@ exports.generateJWT = (user) => {
 exports.getUser = async (id) => {
   const user = await User.findOne({
     where: { id },
-    attributes: ["id", "firstName", "lastName", "email", "sheetsURL"],
+    attributes: {
+      exclude: [
+        "password",
+        "resetPasswordToken",
+        "resetPasswordExpiry",
+        "isAdmin",
+        "isDeleted",
+        "createdAt",
+        "updatedAt",
+        "deletedAt",
+      ],
+    },
   });
 
   if (user) {

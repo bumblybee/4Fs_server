@@ -1,49 +1,22 @@
 const milestones = [
   {
+    f: "Focus",
     milestone: "Define Goal, Identity, and Result",
     personalize:
       "I (system) every day because I (name) am (new identity). My new life allows me to (enables what).",
   },
   {
+    f: "Fasting",
+    milestone: "Go Normally without food for 16-20 hrs.",
+  },
+  {
+    f: "Food",
+    milestone: "Eat your favorite food properly.",
+  },
+  {
+    f: "Fitness",
     milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    milestone: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  },
-  {
-    milestone:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia, ex.",
-  },
-  {
-    milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    milestone:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia, ex.!",
-  },
-  {
-    milestone:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error ad, quam nostrum sed officia molestiae!",
-  },
-  {
-    milestone: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-  },
-  {
-    milestone: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      "Burn the same amount of calories as someone who goes to the gym.",
   },
 ];
 

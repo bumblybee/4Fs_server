@@ -4,6 +4,11 @@ module.exports = (sequelize, DataTypes) => {
   const Milestone = sequelize.define(
     "milestone",
     {
+      f: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: "f",
+      },
       milestone: {
         type: DataTypes.STRING,
         allowNull: false,
