@@ -2,6 +2,7 @@ const User = require("../db").User;
 const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 const crypto = require("crypto");
+const { Op } = require("sequelize");
 const { RESET_PASSWORD_URL } = require("../config/passwordResetConfig");
 const { Milestone } = require("../db");
 const emailHandler = require("../handlers/emailHandler");
@@ -169,7 +170,7 @@ exports.updateUser = async (id, changes) => {
 };
 
 exports.generatePasswordReset = async (email) => {
-  const userRecord = await User.findOne({ where: { email: email } });
+  const userRecord = await User.findOne({ where: { email } });
 
   const resetToken = crypto.randomBytes(25).toString("hex");
   const resetExpiry = Date.now() + 1000 * 60 * 60;
@@ -182,12 +183,31 @@ exports.generatePasswordReset = async (email) => {
 
     const resetPasswordUrl = `${RESET_PASSWORD_URL}/${resetToken}`;
 
-    emailHandler.sendEmail({
+    await emailHandler.sendEmail({
       subject: "Request to Reset your Password",
       filename: "resetPasswordEmail",
       user: { email },
       resetPasswordUrl,
     });
+  }
+
+  return { userRecord };
+};
+
+exports.passwordReset = async (token, password) => {
+  const userRecord = await User.findOne({
+    where: {
+      resetPasswordToken: token,
+      resetPasswordExpiry: { [Op.gt]: Date.now() },
+    },
+  });
+
+  if (userRecord) {
+    const hashedPassword = await argon2.hash(password);
+
+    await userRecord.update({ password: hashedPassword });
+  } else {
+    throw new CustomError("auth.invalidCredentials", "passwordResetError", 401);
   }
 
   return { userRecord };

@@ -9,6 +9,7 @@ const {
   updateUser,
   checkUserEmail,
   generatePasswordResetLink,
+  resetPassword,
 } = require("../controllers/userController");
 const { errorWrapper } = require("../handlers/errorHandlers");
 
@@ -20,6 +21,7 @@ router.post("/signup", errorWrapper(signupUser));
 router.post("/login", errorWrapper(loginUser));
 
 router.post("/reset-password", errorWrapper(generatePasswordResetLink));
+router.post("/reset-password/:token", errorWrapper(resetPassword));
 
 router.put("/", isAuth, errorWrapper(updateUser));
 

@@ -60,10 +60,30 @@ exports.generatePasswordResetLink = async (req, res) => {
   const { email } = req.body;
 
   const { userRecord } = authService.generatePasswordReset(email);
+  console.log(userRecord);
 
   if (!userRecord) {
     // TODO: Add logging noting user doesn't exist
     console.log(userRecord);
   }
   res.json({ message: "An email has been sent to the address provided." });
+};
+
+exports.resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const { userRecord } = await authService.passwordReset(token, password);
+
+  if (!token || !userRecord) {
+    throw new CustomError("auth.noToken", "PasswordResetError", 401);
+  }
+
+  res.json({
+    message: "Password Updated",
+
+    id: userRecord.id,
+    email: userRecord.email,
+    username: userRecord.username,
+  });
 };
