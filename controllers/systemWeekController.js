@@ -6,7 +6,7 @@ exports.getCurrentWeek = async (req, res) => {
   const currDate = moment().format("YYYY-MM-DD");
 
   const week = await SystemWeek.findOne({
-    where: { endDate: { [Op.gt]: currDate }, isDeleted: false },
+    where: { [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false }] },
   });
 
   res.status(200).json({ data: week });
