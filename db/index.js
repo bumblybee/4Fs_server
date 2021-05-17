@@ -49,8 +49,8 @@ const Moment = MomentModel(sequelize, Sequelize);
 const Resource = ResourceModel(sequelize, Sequelize);
 const Skill = SkillModel(sequelize, Sequelize);
 const Sleep = SleepModel(sequelize, Sequelize);
-const System = SystemWeekModel(sequelize, Sequelize);
-const SystemWeek = SystemModel(sequelize, Sequelize);
+const SystemWeek = SystemWeekModel(sequelize, Sequelize);
+const System = SystemModel(sequelize, Sequelize);
 const User = UserModel(sequelize, Sequelize);
 
 // Relationships
@@ -63,7 +63,7 @@ User.hasMany(Moment);
 User.hasMany(Skill);
 User.hasMany(Sleep);
 User.hasMany(System);
-SystemWeek.hasMany(System);
+System.hasOne(SystemWeek);
 
 Accomplishment.belongsTo(User);
 Belief.belongsTo(User);
@@ -74,7 +74,7 @@ Moment.belongsTo(User);
 Skill.belongsTo(User);
 Sleep.belongsTo(User);
 System.belongsTo(User);
-System.belongsTo(SystemWeek);
+SystemWeek.belongsTo(System);
 
 // Authenticate db and log connection or err
 sequelize

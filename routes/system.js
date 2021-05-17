@@ -10,6 +10,8 @@ router
   .get(controllers.getMany)
   .post(errorWrapper(controllers.createOne));
 
+router.route("/current-week").get(controllers.getCurrentWeek);
+
 router
   .route("/:id")
   .post(errorWrapper(controllers.updateOrCreate))
