@@ -13,6 +13,7 @@ const ResourceModel = require("./models/resource.js");
 const SkillModel = require("./models/skill.js");
 const SleepModel = require("./models/sleep.js");
 const SystemModel = require("./models/system.js");
+const SystemWeekModel = require("./models/systemWeek.js");
 const UserModel = require("./models/user.js");
 
 // Database environment config
@@ -48,7 +49,8 @@ const Moment = MomentModel(sequelize, Sequelize);
 const Resource = ResourceModel(sequelize, Sequelize);
 const Skill = SkillModel(sequelize, Sequelize);
 const Sleep = SleepModel(sequelize, Sequelize);
-const System = SystemModel(sequelize, Sequelize);
+const System = SystemWeekModel(sequelize, Sequelize);
+const SystemWeek = SystemModel(sequelize, Sequelize);
 const User = UserModel(sequelize, Sequelize);
 
 // Relationships
@@ -61,6 +63,8 @@ User.hasMany(Moment);
 User.hasMany(Skill);
 User.hasMany(Sleep);
 User.hasMany(System);
+SystemWeek.hasMany(System);
+
 Accomplishment.belongsTo(User);
 Belief.belongsTo(User);
 FastingWindow.belongsTo(User);
@@ -70,6 +74,7 @@ Moment.belongsTo(User);
 Skill.belongsTo(User);
 Sleep.belongsTo(User);
 System.belongsTo(User);
+System.belongsTo(SystemWeek);
 
 // Authenticate db and log connection or err
 sequelize
@@ -90,5 +95,6 @@ module.exports = {
   Skill,
   Sleep,
   System,
+  SystemWeek,
   User,
 };
