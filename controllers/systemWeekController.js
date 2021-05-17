@@ -1,11 +1,12 @@
-const { SystemWeek } = require("../db");
+const { SystemWeek, System } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
 
 exports.getCurrentWeek = async (req, res) => {
   const currDate = moment().format("YYYY-MM-DD");
 
-  const week = await SystemWeek.findOne({
+  const week = await SystemWeek.findAll({
+    limit: 1,
     where: { [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false }] },
   });
 
@@ -25,4 +26,24 @@ exports.setWeek = async (req, res) => {
   }
 
   res.status(201).json({ data: record });
+};
+
+exports.deleteCurrentWeek = async (req, res) => {
+  const id = req.params.id;
+  //delete system records associated with week
+  const systemRecords = await System.update(
+    { isDeleted: true },
+    { where: { systemWeekId: id } }
+  );
+
+  const weekRecord = await SystemWeek.update(
+    { isDeleted: true },
+    {
+      where: { id },
+      returning: true,
+      plain: true,
+    }
+  );
+
+  res.status(200).json({ data: weekRecord, systemRecords });
 };

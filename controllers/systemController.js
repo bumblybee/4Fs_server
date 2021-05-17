@@ -21,6 +21,7 @@ module.exports = {
     const records = await System.findAll({
       where: { [Op.and]: [{ systemWeekId: week.id }, { isDeleted: false }] },
       include: SystemWeek,
+      order: [["createdAt", "ASC"]],
     });
 
     res.status(200).json({ data: records });

@@ -7,10 +7,6 @@ router.route("/").post(errorWrapper(controllers.setWeek));
 
 router.route("/current").get(controllers.getCurrentWeek);
 
-// router
-//   .route("/:id")
-//   .post(errorWrapper(controllers.updateOrCreate))
-//   .put(errorWrapper(controllers.updateOne))
-//   .delete(errorWrapper(controllers.deleteOne));
+router.route("/:id").delete(errorWrapper(controllers.deleteCurrentWeek));
 
 module.exports = router;
