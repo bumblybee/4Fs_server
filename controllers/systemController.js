@@ -12,12 +12,14 @@ module.exports = {
 
     // Get system weeks where end date is after today
     const week = await SystemWeek.findOne({
-      where: { endDate: { [Op.gt]: currDate }, isDeleted: false },
+      where: {
+        [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false }],
+      },
     });
 
     // Get system records with system week id from above
     const records = await System.findAll({
-      where: { systemWeekId: week.id },
+      where: { [Op.and]: [{ systemWeekId: week.id }, { isDeleted: false }] },
       include: SystemWeek,
     });
 
