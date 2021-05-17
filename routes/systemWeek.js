@@ -3,10 +3,9 @@ const router = express.Router();
 const controllers = require("../controllers/systemWeekController");
 const { errorWrapper } = require("../handlers/errorHandlers");
 
-router
-  .route("/")
-  //   .get(controllers.getMany)
-  .post(errorWrapper(controllers.setWeek));
+router.route("/").post(errorWrapper(controllers.setWeek));
+
+router.route("/current").get(controllers.getCurrentWeek);
 
 // router
 //   .route("/:id")

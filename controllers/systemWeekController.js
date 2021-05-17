@@ -1,5 +1,16 @@
 const { SystemWeek } = require("../db");
+const { Op } = require("sequelize");
 const moment = require("moment");
+
+exports.getCurrentWeek = async (req, res) => {
+  const currDate = moment().format("YYYY-MM-DD");
+
+  const week = await SystemWeek.findOne({
+    where: { endDate: { [Op.gt]: currDate }, isDeleted: false },
+  });
+
+  res.status(200).json({ data: week });
+};
 
 exports.setWeek = async (req, res) => {
   const { id: userId } = req.token.data;
