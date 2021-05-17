@@ -63,7 +63,7 @@ User.hasMany(Moment);
 User.hasMany(Skill);
 User.hasMany(Sleep);
 User.hasMany(System);
-System.hasOne(SystemWeek);
+SystemWeek.hasMany(System);
 
 Accomplishment.belongsTo(User);
 Belief.belongsTo(User);
@@ -74,7 +74,7 @@ Moment.belongsTo(User);
 Skill.belongsTo(User);
 Sleep.belongsTo(User);
 System.belongsTo(User);
-SystemWeek.belongsTo(System);
+System.belongsTo(SystemWeek);
 
 // Authenticate db and log connection or err
 sequelize

@@ -1,8 +1,5 @@
-const { crudControllers } = require("./crud/crudControllers");
 const { SystemWeek } = require("../db");
 const moment = require("moment");
-
-// module.exports = crudControllers(SystemWeek);
 
 exports.setWeek = async (req, res) => {
   const { id: userId } = req.token.data;
