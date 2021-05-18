@@ -8,10 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         field: "practice",
       },
-      startDate: {
-        type: DataTypes.DATEONLY,
-        field: "start_date",
-      },
       dayOne: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
