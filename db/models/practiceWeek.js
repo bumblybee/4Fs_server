@@ -1,8 +1,8 @@
 "use strict";
 
 module.exports = (sequelize, DataTypes) => {
-  const SystemWeek = sequelize.define(
-    "system_week",
+  const PracticeWeek = sequelize.define(
+    "practice_week",
     {
       startDate: {
         type: DataTypes.DATEONLY,
@@ -36,8 +36,8 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     },
 
-    { tableName: "system_week" }
+    { tableName: "practice_week" }
   );
 
-  return SystemWeek;
+  return PracticeWeek;
 };

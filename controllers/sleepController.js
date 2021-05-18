@@ -10,7 +10,7 @@ module.exports = {
     try {
       const { id: userId } = req.token.data;
       console.log(req.body);
-      const records = await System.findAll({
+      const records = await Sleep.findAll({
         where: {
           [Op.and]: [
             { userId },
@@ -29,7 +29,7 @@ module.exports = {
             "deletedAt",
           ],
         },
-        order: [["id", "ASC"]],
+        order: [["createdAt", "ASC"]],
       });
 
       if (!records) {

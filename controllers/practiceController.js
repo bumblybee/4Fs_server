@@ -1,6 +1,6 @@
 const { crudControllers } = require("./crud/crudControllers");
 const { Practice } = require("../db");
-const { SystemWeek } = require("../db");
+const { PracticeWeek } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
 
@@ -11,11 +11,11 @@ module.exports = {
     const { id: userId } = req.token.data;
     const currDate = moment().format("YYYY-MM-DD");
 
-    // Get user's practice records where systemWeek endDate prior to today
+    // Get user's practice records where PracticeWeek endDate prior to today
     const records = await Practice.findAll({
       where: { userId, isDeleted: false },
       include: {
-        model: SystemWeek,
+        model: PracticeWeek,
         where: {
           [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false }],
         },
@@ -33,7 +33,7 @@ module.exports = {
     const records = await Practice.findAll({
       where: { userId },
       include: {
-        model: SystemWeek,
+        model: PracticeWeek,
         where: {
           [Op.and]: [{ endDate: { [Op.lt]: currDate }, isDeleted: false }],
         },

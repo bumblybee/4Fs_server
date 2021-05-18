@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controllers = require("../controllers/systemWeekController");
+const controllers = require("../controllers/practiceWeeksController");
 const { errorWrapper } = require("../handlers/errorHandlers");
 
 router.route("/").post(errorWrapper(controllers.setNewWeek));

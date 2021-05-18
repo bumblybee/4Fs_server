@@ -22,7 +22,7 @@ const resourcesRouter = require("./routes/resources");
 const skillsRouter = require("./routes/skills");
 const sleepRouter = require("./routes/sleep");
 const practicesRouter = require("./routes/practices");
-const systemWeekRouter = require("./routes/systemWeek");
+const practiceWeeksRouter = require("./routes/practiceWeeks");
 
 const app = express();
 
@@ -59,7 +59,7 @@ app.use("/resources", isAuth, resourcesRouter);
 app.use("/skills", isAuth, skillsRouter);
 app.use("/sleep", isAuth, sleepRouter);
 app.use("/practices", isAuth, practicesRouter);
-app.use("/system-week", isAuth, systemWeekRouter);
+app.use("/practice-weeks", isAuth, practiceWeeksRouter);
 
 app.use(errorHandlers.sequelizeErrorHandler);
 app.use(errorHandlers.notFound);

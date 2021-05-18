@@ -13,7 +13,7 @@ const ResourceModel = require("./models/resource.js");
 const SkillModel = require("./models/skill.js");
 const SleepModel = require("./models/sleep.js");
 const PracticeModel = require("./models/practice.js");
-const SystemWeekModel = require("./models/systemWeek.js");
+const PracticeWeekModel = require("./models/practiceWeek.js");
 const UserModel = require("./models/user.js");
 
 // Database environment config
@@ -49,7 +49,7 @@ const Moment = MomentModel(sequelize, Sequelize);
 const Resource = ResourceModel(sequelize, Sequelize);
 const Skill = SkillModel(sequelize, Sequelize);
 const Sleep = SleepModel(sequelize, Sequelize);
-const SystemWeek = SystemWeekModel(sequelize, Sequelize);
+const PracticeWeek = PracticeWeekModel(sequelize, Sequelize);
 const Practice = PracticeModel(sequelize, Sequelize);
 const User = UserModel(sequelize, Sequelize);
 
@@ -63,8 +63,8 @@ User.hasMany(Moment);
 User.hasMany(Skill);
 User.hasMany(Sleep);
 User.hasMany(Practice);
-User.hasMany(SystemWeek);
-SystemWeek.hasMany(Practice);
+User.hasMany(PracticeWeek);
+PracticeWeek.hasMany(Practice);
 
 Accomplishment.belongsTo(User);
 Belief.belongsTo(User);
@@ -74,9 +74,9 @@ Milestone.belongsTo(User);
 Moment.belongsTo(User);
 Skill.belongsTo(User);
 Sleep.belongsTo(User);
-SystemWeek.belongsTo(User);
+PracticeWeek.belongsTo(User);
 Practice.belongsTo(User);
-Practice.belongsTo(SystemWeek);
+Practice.belongsTo(PracticeWeek);
 
 // Authenticate db and log connection or err
 sequelize
@@ -97,6 +97,6 @@ module.exports = {
   Skill,
   Sleep,
   Practice,
-  SystemWeek,
+  PracticeWeek,
   User,
 };

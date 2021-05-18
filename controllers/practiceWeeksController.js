@@ -1,4 +1,4 @@
-const { SystemWeek, System } = require("../db");
+const { PracticeWeek, Practice } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
 const { CustomError } = require("../handlers/errorHandlers");
@@ -7,7 +7,7 @@ exports.getCurrentWeek = async (req, res) => {
   const { id: userId } = req.token.data;
   const currDate = moment().format("YYYY-MM-DD");
 
-  const week = await SystemWeek.findAll({
+  const week = await PracticeWeek.findAll({
     limit: 1,
     where: {
       [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false, userId }],
@@ -27,11 +27,11 @@ exports.setNewWeek = async (req, res) => {
   if (validDate) {
     const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
 
-    const record = await SystemWeek.create({ startDate, endDate, userId });
+    const record = await PracticeWeek.create({ startDate, endDate, userId });
 
     res.status(201).json({ data: record });
   } else {
-    throw new CustomError("system.invalidDate", "SystemWeekError", 400);
+    throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
   }
 };
 
@@ -39,17 +39,17 @@ exports.deleteCurrentWeek = async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
 
-  //delete user's system records associated with week
-  const deletedSystemRecords = await System.update(
+  //delete user's practice records associated with week
+  const deletedPracticeRecords = await Practice.update(
     { isDeleted: true },
     {
-      where: { [Op.and]: [{ systemWeekId: id }, { userId }] },
+      where: { [Op.and]: [{ practiceWeekId: id }, { userId }] },
       returning: true,
       plain: true,
     }
   );
 
-  const deletedSystemWeekRecord = await SystemWeek.update(
+  const deletedPracticeWeekRecord = await PracticeWeek.update(
     { isDeleted: true },
     {
       where: { [Op.and]: [{ id }, { userId }] },
@@ -59,7 +59,7 @@ exports.deleteCurrentWeek = async (req, res) => {
   );
 
   res.status(200).json({
-    deletedSystemWeekRecord: deletedSystemWeekRecord[1],
-    deletedSystemRecords: deletedSystemRecords[1],
+    deletedPracticeWeekRecord: deletedPracticeWeekRecord[1],
+    deletedPracticeRecords: deletedPracticeRecords[1],
   });
 };
