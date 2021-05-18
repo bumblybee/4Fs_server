@@ -8,10 +8,12 @@ module.exports = {
   ...crudControllers(System, ["createdAt", "ASC"]),
 
   async getCurrentWeekSystem(req, res) {
+    const { id: userId } = req.token.data;
     const currDate = moment().format("YYYY-MM-DD");
 
     // Get system records where systemWeek endDate prior to today
     const records = await System.findAll({
+      where: { userId },
       include: {
         model: SystemWeek,
         where: {
@@ -25,9 +27,11 @@ module.exports = {
   },
 
   async getPriorWeeksSystems(req, res) {
+    const { id: userId } = req.token.data;
     const currDate = moment().format("YYYY-MM-DD");
 
     const records = await System.findAll({
+      where: { userId },
       include: {
         model: SystemWeek,
         where: {

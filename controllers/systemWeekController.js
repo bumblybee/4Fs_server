@@ -14,29 +14,25 @@ exports.getCurrentWeek = async (req, res) => {
 };
 
 exports.setNewWeek = async (req, res) => {
-  const { id: userId } = req.token.data;
   const { startDate } = req.body;
-  console.log(startDate);
   const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
 
-  const record = await SystemWeek.create({ startDate, endDate, userId });
-
-  if (!record) {
-    res.status(404).json({ message: "record.notFound" });
-  }
+  const record = await SystemWeek.create({ startDate, endDate });
 
   res.status(201).json({ data: record });
 };
 
 exports.deleteCurrentWeek = async (req, res) => {
   const id = req.params.id;
+  const { id: userId } = req.token.data;
+
   //delete system records associated with week
-  const systemRecords = await System.update(
+  const deletedSystemRecords = await System.update(
     { isDeleted: true },
-    { where: { systemWeekId: id } }
+    { where: { [Op.and]: [{ systemWeekId: id }, { userId }] } }
   );
 
-  const weekRecord = await SystemWeek.update(
+  const deletedSystemWeekRecord = await SystemWeek.update(
     { isDeleted: true },
     {
       where: { id },
@@ -45,5 +41,5 @@ exports.deleteCurrentWeek = async (req, res) => {
     }
   );
 
-  res.status(200).json({ data: weekRecord, systemRecords });
+  res.status(200).json({ deletedSystemWeekRecord, deletedSystemRecords });
 };
