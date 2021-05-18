@@ -1,8 +1,8 @@
 "use strict";
 
 module.exports = (sequelize, DataTypes) => {
-  const System = sequelize.define(
-    "system",
+  const Practice = sequelize.define(
+    "practice",
     {
       practice: {
         type: DataTypes.STRING,
@@ -82,8 +82,8 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     },
 
-    { tableName: "system" }
+    { tableName: "practice" }
   );
 
-  return System;
+  return Practice;
 };

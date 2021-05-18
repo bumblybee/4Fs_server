@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const controllers = require("../controllers/systemController");
+const controllers = require("../controllers/practiceController");
 const { errorWrapper } = require("../handlers/errorHandlers");
 
 router
@@ -8,8 +8,8 @@ router
   .get(controllers.getMany)
   .post(errorWrapper(controllers.createOne));
 
-router.route("/current").get(controllers.getCurrentWeekSystem);
-router.route("/prior").get(controllers.getPriorWeeksSystems);
+router.route("/current").get(controllers.getCurrentWeeksPractices);
+router.route("/prior").get(controllers.getPriorWeeksPractices);
 
 router
   .route("/:id")

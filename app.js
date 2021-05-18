@@ -21,7 +21,7 @@ const momentsRouter = require("./routes/moments");
 const resourcesRouter = require("./routes/resources");
 const skillsRouter = require("./routes/skills");
 const sleepRouter = require("./routes/sleep");
-const systemRouter = require("./routes/system");
+const practicesRouter = require("./routes/practices");
 const systemWeekRouter = require("./routes/systemWeek");
 
 const app = express();
@@ -58,7 +58,7 @@ app.use("/moments", isAuth, momentsRouter);
 app.use("/resources", isAuth, resourcesRouter);
 app.use("/skills", isAuth, skillsRouter);
 app.use("/sleep", isAuth, sleepRouter);
-app.use("/system", isAuth, systemRouter);
+app.use("/practices", isAuth, practicesRouter);
 app.use("/system-week", isAuth, systemWeekRouter);
 
 app.use(errorHandlers.sequelizeErrorHandler);
