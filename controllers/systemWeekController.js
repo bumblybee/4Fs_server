@@ -42,7 +42,11 @@ exports.deleteCurrentWeek = async (req, res) => {
   //delete user's system records associated with week
   const deletedSystemRecords = await System.update(
     { isDeleted: true },
-    { where: { [Op.and]: [{ systemWeekId: id }, { userId }] } }
+    {
+      where: { [Op.and]: [{ systemWeekId: id }, { userId }] },
+      returning: true,
+      plain: true,
+    }
   );
 
   const deletedSystemWeekRecord = await SystemWeek.update(
@@ -54,5 +58,8 @@ exports.deleteCurrentWeek = async (req, res) => {
     }
   );
 
-  res.status(200).json({ deletedSystemWeekRecord, deletedSystemRecords });
+  res.status(200).json({
+    deletedSystemWeekRecord: deletedSystemWeekRecord[1],
+    deletedSystemRecords: deletedSystemRecords[1],
+  });
 };

@@ -13,7 +13,7 @@ module.exports = {
 
     // Get user's system records where systemWeek endDate prior to today
     const records = await System.findAll({
-      where: { userId },
+      where: { userId, isDeleted: false },
       include: {
         model: SystemWeek,
         where: {
