@@ -18,29 +18,44 @@ exports.getCurrentWeek = async (req, res) => {
   res.status(200).json({ data: week });
 };
 
+exports.getPriorWeeks = async (req, res) => {
+  const { id: userId } = req.token.data;
+  const currDate = moment().format("YYYY-MM-DD");
+
+  const week = await PracticeWeek.findAll({
+    where: {
+      [Op.and]: [{ endDate: { [Op.lt]: currDate }, isDeleted: false, userId }],
+    },
+    order: [["startDate", "DESC"]],
+  });
+
+  res.status(200).json({ data: week });
+};
+
 exports.setNewWeek = async (req, res) => {
   const { id: userId } = req.token.data;
   const { startDate } = req.body;
   const validDate = moment(startDate).isSameOrAfter(moment());
 
   // Safety measure - check if start date >= today before creating record
-  if (validDate) {
-    const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
+  // if (validDate) {
+  const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
 
-    const record = await PracticeWeek.create({ startDate, endDate, userId });
+  const record = await PracticeWeek.create({ startDate, endDate, userId });
 
-    res.status(201).json({ data: record });
-  } else {
-    throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
-  }
+  res.status(201).json({ data: record });
+  // } else {
+  //   throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
+  // }
 };
 
+// TODO: May want to move this to practiceController
 exports.deleteCurrentWeek = async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
 
   //delete user's practice records associated with week
-  const deletedPracticeRecords = await Practice.update(
+  const deletedRecords = await Practice.update(
     { isDeleted: true },
     {
       where: { [Op.and]: [{ practiceWeekId: id }, { userId }] },
@@ -49,7 +64,7 @@ exports.deleteCurrentWeek = async (req, res) => {
     }
   );
 
-  const deletedPracticeWeekRecord = await PracticeWeek.update(
+  const deletedWeek = await PracticeWeek.update(
     { isDeleted: true },
     {
       where: { [Op.and]: [{ id }, { userId }] },
@@ -59,7 +74,9 @@ exports.deleteCurrentWeek = async (req, res) => {
   );
 
   res.status(200).json({
-    deletedPracticeWeekRecord: deletedPracticeWeekRecord[1],
-    deletedPracticeRecords: deletedPracticeRecords[1],
+    data: {
+      deletedWeek: deletedWeek[1],
+      deletedRecords: deletedRecords[1],
+    },
   });
 };
