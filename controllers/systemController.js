@@ -11,7 +11,7 @@ module.exports = {
     const { id: userId } = req.token.data;
     const currDate = moment().format("YYYY-MM-DD");
 
-    // Get system records where systemWeek endDate prior to today
+    // Get user's system records where systemWeek endDate prior to today
     const records = await System.findAll({
       where: { userId },
       include: {

@@ -63,6 +63,7 @@ User.hasMany(Moment);
 User.hasMany(Skill);
 User.hasMany(Sleep);
 User.hasMany(System);
+User.hasMany(SystemWeek);
 SystemWeek.hasMany(System);
 
 Accomplishment.belongsTo(User);
@@ -73,6 +74,7 @@ Milestone.belongsTo(User);
 Moment.belongsTo(User);
 Skill.belongsTo(User);
 Sleep.belongsTo(User);
+SystemWeek.belongsTo(User);
 System.belongsTo(User);
 System.belongsTo(SystemWeek);
 
