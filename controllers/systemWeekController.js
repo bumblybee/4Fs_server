@@ -11,6 +11,7 @@ exports.getCurrentWeek = async (req, res) => {
     where: {
       [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false, userId }],
     },
+    order: [["createdAt", "DESC"]],
   });
 
   res.status(200).json({ data: week });
