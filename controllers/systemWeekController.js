@@ -13,7 +13,7 @@ exports.getCurrentWeek = async (req, res) => {
   res.status(200).json({ data: week });
 };
 
-exports.setWeek = async (req, res) => {
+exports.setNewWeek = async (req, res) => {
   const { id: userId } = req.token.data;
   const { startDate } = req.body;
   console.log(startDate);

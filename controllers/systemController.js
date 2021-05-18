@@ -10,18 +10,31 @@ module.exports = {
   async getCurrentWeekSystem(req, res) {
     const currDate = moment().format("YYYY-MM-DD");
 
-    // Get system weeks where end date is after today
-    const week = await SystemWeek.findOne({
-      where: {
-        [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false }],
+    // Get system records where systemWeek endDate prior to today
+    const records = await System.findAll({
+      include: {
+        model: SystemWeek,
+        where: {
+          [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false }],
+        },
       },
+      order: [["createdAt", "ASC"]],
     });
 
-    // Get system records with system week id from above
+    res.status(200).json({ data: records });
+  },
+
+  async getPriorWeeksSystems(req, res) {
+    const currDate = moment().format("YYYY-MM-DD");
+
     const records = await System.findAll({
-      where: { [Op.and]: [{ systemWeekId: week.id }, { isDeleted: false }] },
-      include: SystemWeek,
-      order: [["createdAt", "ASC"]],
+      include: {
+        model: SystemWeek,
+        where: {
+          [Op.and]: [{ endDate: { [Op.lt]: currDate }, isDeleted: false }],
+        },
+      },
+      order: [["createdAt", "DESC"]],
     });
 
     res.status(200).json({ data: records });

@@ -11,6 +11,7 @@ router
   .post(errorWrapper(controllers.createOne));
 
 router.route("/current").get(controllers.getCurrentWeekSystem);
+router.route("/prior").get(controllers.getPriorWeeksSystems);
 
 router
   .route("/:id")
