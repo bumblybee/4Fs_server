@@ -11,13 +11,13 @@ module.exports = {
     const { id: userId } = req.token.data;
     const currDate = moment().format("YYYY-MM-DD");
 
-    // Get user's practice records where PracticeWeek endDate prior to today
+    // Get current practice records - week end date >= today
     const records = await Practice.findAll({
       where: { userId, isDeleted: false },
       include: {
         model: PracticeWeek,
         where: {
-          [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false }],
+          [Op.and]: [{ endDate: { [Op.gte]: currDate }, isDeleted: false }],
         },
       },
       order: [["createdAt", "ASC"]],
