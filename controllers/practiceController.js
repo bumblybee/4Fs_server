@@ -11,7 +11,7 @@ module.exports = {
     const { id: userId } = req.token.data;
     const currDate = moment().format("YYYY-MM-DD");
 
-    // Get current practice records - week end date >= today
+    // Get current practice records - week's end date >= today
     const records = await Practice.findAll({
       where: { userId, isDeleted: false },
       include: {
@@ -26,12 +26,35 @@ module.exports = {
     res.status(200).json({ data: records });
   },
 
-  async getPriorWeeksPractices(req, res) {
+  async getLastWeeksPractices(req, res) {
+    const { id: userId } = req.token.data;
+
+    const latestWeek = await PracticeWeek.findOne({
+      where: { userId },
+      order: [["createdAt", "DESC"]],
+    });
+
+    const records = await Practice.findAll({
+      where: {
+        [Op.and]: [
+          { isDeleted: false },
+          { practiceWeekId: latestWeek.id },
+          { userId },
+        ],
+      },
+      // For UI display purposes only, don't need all attrs. New practices will be created when user chooses start date
+      attributes: ["practice", "userId"],
+    });
+
+    res.status(200).json({ data: records });
+  },
+
+  async getPracticeProgress(req, res) {
     const { id: userId } = req.token.data;
     const currDate = moment().format("YYYY-MM-DD");
 
     const records = await Practice.findAll({
-      where: { userId },
+      where: { userId, isDeleted: false },
       include: {
         model: PracticeWeek,
         where: {

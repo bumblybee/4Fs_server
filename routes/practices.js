@@ -9,7 +9,8 @@ router
   .post(errorWrapper(controllers.createOne));
 
 router.route("/current").get(controllers.getCurrentWeeksPractices);
-router.route("/prior").get(controllers.getPriorWeeksPractices);
+router.route("/latest").get(controllers.getLastWeeksPractices);
+router.route("/prior").get(controllers.getPracticeProgress);
 
 router
   .route("/:id")
