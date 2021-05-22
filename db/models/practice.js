@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       goal: {
         type: DataTypes.INTEGER,
-        defaultValue: 1,
+        defaultValue: 0,
         field: "goal",
       },
       performed: {

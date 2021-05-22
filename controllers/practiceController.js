@@ -101,7 +101,7 @@ module.exports = {
         plain: true,
       });
 
-      if (req.body.practice) {
+      if (req.body.practice && record) {
         await PracticeStore.update(req.body, {
           where: {
             [Op.and]: [{ userId }, { practice: origPractice.practice }],
@@ -124,7 +124,10 @@ module.exports = {
     const id = req.params.id;
     const { id: userId } = req.token.data;
 
-    const ogPractice = await Practice.findOne({ where: id });
+    const origPractice = await Practice.findOne({
+      where: { id },
+      attributes: ["practice"],
+    });
 
     const deletedRecord = await Practice.update(
       { isDeleted: true },
@@ -135,10 +138,16 @@ module.exports = {
       }
     );
 
-    await PracticeStore.update(
-      { isDeleted: true },
-      { where: { [Op.and]: [{ userId }, { practice: ogPractice.practice }] } }
-    );
+    if (deletedRecord) {
+      await PracticeStore.update(
+        { isDeleted: true },
+        {
+          where: {
+            [Op.and]: [{ userId }, { practice: origPractice.practice }],
+          },
+        }
+      );
+    }
 
     // Get current practice records - week's end date >= today
     const records = await queryCurrentPractices(userId);

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const controllers = require("../controllers/practiceController");
+const practiceStoreController = require("../controllers/practiceStoreController");
 const { errorWrapper } = require("../handlers/errorHandlers");
 
 router
@@ -11,6 +12,7 @@ router
 router.route("/current").get(controllers.getCurrentWeeksPractices);
 // router.route("/latest").get(controllers.getLatestPractices);
 router.route("/progress").get(controllers.getPracticeProgress);
+router.route("/store").get(practiceStoreController.getStoredPractices);
 
 router
   .route("/:id")

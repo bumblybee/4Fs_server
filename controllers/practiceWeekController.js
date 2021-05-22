@@ -1,4 +1,4 @@
-const { PracticeWeek, Practice } = require("../db");
+const { PracticeWeek, Practice, PracticeStore } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
 const { CustomError } = require("../handlers/errorHandlers");
@@ -13,12 +13,17 @@ exports.setNewWeek = async (req, res) => {
   if (validDate) {
     const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
 
+    const storedPractices = await PracticeStore.findAll({
+      where: { [Op.and]: [{ userId }, { isDeleted: false }] },
+      attributes: ["practice", "userId"],
+    });
+
     const record = await PracticeWeek.create(
       // Include last practices in current week creation
-      { startDate, endDate, userId },
+      { startDate, endDate, userId, practices: storedPractices },
       { include: [Practice] }
     );
-    res.status(201).json({ data: [record, ...lastWeeksPractices] });
+    res.status(201).json({ data: [record] });
   } else {
     throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
   }
@@ -54,38 +59,30 @@ exports.getProgressWeeks = async (req, res) => {
   res.status(200).json({ data: week });
 };
 
-exports.setNewWeek = async (req, res) => {
-  const { id: userId } = req.token.data;
-  const { startDate } = req.body;
-  const validDate = moment(startDate).isSameOrAfter(
-    moment().format("YYYY-MM-DD")
-  );
+// exports.setNewWeek = async (req, res) => {
+//   const { id: userId } = req.token.data;
+//   const { startDate } = req.body;
+//   const validDate = moment(startDate).isSameOrAfter(
+//     moment().format("YYYY-MM-DD")
+//   );
 
-  // Safety measure - check if start date >= today before creating record
-  if (validDate) {
-    const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
+//   // Safety measure - check if start date >= today before creating record
+//   if (validDate) {
+//     const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
 
-    const record = await PracticeWeek.create({ startDate, endDate, userId });
+//     const record = await PracticeWeek.create({ startDate, endDate, userId });
 
-    res.status(201).json({ data: record });
-  } else {
-    throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
-  }
-};
+//     res.status(201).json({ data: record });
+//   } else {
+//     throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
+//   }
+// };
 
 exports.deleteCurrentWeek = async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
-
+  console.log("hit");
   //delete user's practice records associated with week
-  // const deletedRecords = await Practice.update(
-  //   { isDeleted: true },
-  //   {
-  //     where: { [Op.and]: [{ practiceWeekId: id }, { userId }] },
-  //     returning: true,
-  //     plain: true,
-  //   }
-  // );
 
   const deletedWeek = await PracticeWeek.update(
     { isDeleted: true },
@@ -96,10 +93,16 @@ exports.deleteCurrentWeek = async (req, res) => {
     }
   );
 
+  if (deletedWeek) {
+    await Practice.update(
+      { isDeleted: true },
+      {
+        where: { [Op.and]: [{ practiceWeekId: id }, { userId }] },
+      }
+    );
+  }
+
   res.status(200).json({
-    data: {
-      deletedWeek: deletedWeek[1],
-      deletedRecords: deletedRecords[1],
-    },
+    data: deletedWeek[1],
   });
 };
