@@ -37,6 +37,12 @@ exports.loginUser = async (req, res) => {
   }
 };
 
+exports.logoutUser = async (req, res) => {
+  res
+    .clearCookie("_4fs", COOKIE_CONFIG)
+    .json({ message: "Successfully logged out" });
+};
+
 exports.checkUserEmail = async (req, res) => {
   const { email } = req.body;
   const emailExists = await authService.checkIfUserEmailExists(email);

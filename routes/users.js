@@ -6,6 +6,7 @@ const {
   getCurrentUser,
   signupUser,
   loginUser,
+  logoutUser,
   updateUser,
   checkUserEmail,
   generatePasswordResetLink,
@@ -19,6 +20,7 @@ router.post("/validate-email", errorWrapper(checkUserEmail));
 
 router.post("/signup", errorWrapper(signupUser));
 router.post("/login", errorWrapper(loginUser));
+router.post("/logout", logoutUser);
 
 router.post("/reset-password", errorWrapper(generatePasswordResetLink));
 router.post("/reset-password/:token", errorWrapper(resetPassword));
