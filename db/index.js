@@ -14,6 +14,7 @@ const SkillModel = require("./models/skill.js");
 const SleepModel = require("./models/sleep.js");
 const PracticeModel = require("./models/practice.js");
 const PracticeWeekModel = require("./models/practiceWeek.js");
+const PracticeStoreModel = require("./models/practiceStore.js");
 const UserModel = require("./models/user.js");
 
 // Database environment config
@@ -50,6 +51,7 @@ const Resource = ResourceModel(sequelize, Sequelize);
 const Skill = SkillModel(sequelize, Sequelize);
 const Sleep = SleepModel(sequelize, Sequelize);
 const PracticeWeek = PracticeWeekModel(sequelize, Sequelize);
+const PracticeStore = PracticeStoreModel(sequelize, Sequelize);
 const Practice = PracticeModel(sequelize, Sequelize);
 const User = UserModel(sequelize, Sequelize);
 
@@ -64,6 +66,7 @@ User.hasMany(Skill);
 User.hasMany(Sleep);
 User.hasMany(Practice);
 User.hasMany(PracticeWeek);
+User.hasMany(PracticeStore);
 PracticeWeek.hasMany(Practice);
 
 Accomplishment.belongsTo(User);
@@ -75,6 +78,7 @@ Moment.belongsTo(User);
 Skill.belongsTo(User);
 Sleep.belongsTo(User);
 PracticeWeek.belongsTo(User);
+PracticeStore.belongsTo(User);
 Practice.belongsTo(User);
 Practice.belongsTo(PracticeWeek);
 
@@ -98,5 +102,6 @@ module.exports = {
   Sleep,
   Practice,
   PracticeWeek,
+  PracticeStore,
   User,
 };

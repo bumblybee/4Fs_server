@@ -1,16 +1,12 @@
 "use strict";
 
 module.exports = (sequelize, DataTypes) => {
-  const PracticeWeek = sequelize.define(
-    "practice_week",
+  const PracticeStore = sequelize.define(
+    "practice_store",
     {
-      startDate: {
-        type: DataTypes.DATEONLY,
-        field: "start_date",
-      },
-      endDate: {
-        type: DataTypes.DATEONLY,
-        field: "end_date",
+      practice: {
+        type: DataTypes.STRING,
+        field: "practice",
       },
       isDeleted: {
         type: DataTypes.BOOLEAN,
@@ -33,10 +29,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       timestamps: true,
       paranoid: true,
+      freezeTableName: true,
     },
 
-    { tableName: "practice_week" }
+    { tableName: "practice_store" }
   );
 
-  return PracticeWeek;
+  return PracticeStore;
 };
