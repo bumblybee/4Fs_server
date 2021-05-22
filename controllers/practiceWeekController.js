@@ -9,43 +9,43 @@ const getLastWeeksPractices = async (userId) => {
     order: [["createdAt", "DESC"]],
   });
 
-  const records = await Practice.findAll({
-    where: {
-      [Op.and]: [
-        { isDeleted: false },
-        { practiceWeekId: latestWeek.id },
-        { userId },
-      ],
-    },
-
-    // Only include the practice and userId, other attributes will be determined in new week
-    attributes: ["practice", "userId"],
-  });
-
-  return records;
+  if (latestWeek) {
+    const records = await Practice.findAll({
+      where: {
+        [Op.and]: [
+          { isDeleted: false },
+          { practiceWeekId: latestWeek.id },
+          { userId },
+        ],
+      },
+      // For UI display purposes only, don't need all attrs. New practices will be created when user chooses start date
+      attributes: ["practice", "userId"],
+    });
+    return records;
+  } else {
+    return;
+  }
 };
 
 exports.setNewWeek = async (req, res) => {
   const { id: userId } = req.token.data;
-  const { startDate, latestPractices } = req.body;
+  const { startDate } = req.body;
   const currDate = moment().format("YYYY-MM-DD");
   const validDate = moment(startDate).isSameOrAfter(currDate);
-
-  // Get the latest practices
-  // !! Send from client instead? Already have there because displaying - {startDate, lastWeeksPractices} = req.body
-  // const lastWeeksPractices = await getLastWeeksPractices(userId);
 
   // Safety measure - check if start date >= today before creating record
   if (validDate) {
     const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
 
+    // Get the latest practices
+    const lastWeeksPractices = await getLastWeeksPractices(userId);
+
     const record = await PracticeWeek.create(
       // Include last practices in current week creation
-      { startDate, endDate, userId, practices: latestPractices },
+      { startDate, endDate, userId, practices: lastWeeksPractices },
       { include: [Practice] }
     );
-
-    res.status(201).json({ data: record });
+    res.status(201).json({ data: [record, ...lastWeeksPractices] });
   } else {
     throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
   }
@@ -61,7 +61,10 @@ exports.getCurrentWeek = async (req, res) => {
       [Op.and]: [{ endDate: { [Op.gte]: currDate }, isDeleted: false, userId }],
     },
     order: [["createdAt", "DESC"]],
+    include: Practice,
   });
+
+  console.log(week.Practice);
 
   res.status(200).json({ data: week });
 };
@@ -94,17 +97,12 @@ exports.deleteCurrentWeek = async (req, res) => {
     }
   );
 
-  // Deleted flag - user's practices associated with week
-  // await Practice.update(
-  //   { isDeleted: true },
-  //   {
-  //     where: { [Op.and]: [{ practiceWeekId: id }, { userId }] },
-  //   }
-  // );
+  const lastWeeksPractices = await getLastWeeksPractices(userId);
+
+  // console.log(lastPractices);
 
   res.status(200).json({
-    data: {
-      deletedWeek: deletedWeek[1],
-    },
+    data: [deletedWeek[1], ...lastWeeksPractices],
+    // deletedWeek: deletedWeek[1],
   });
 };

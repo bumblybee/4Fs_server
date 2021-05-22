@@ -134,7 +134,7 @@ exports.deleteOne = (model) => async (req, res) => {
     res.status(404).json({ message: "record.notFound" });
   }
 
-  res.status(200).json({ data: recordsWithRecordRemoved, deleted: record });
+  res.status(200).json({ data: recordsWithRecordRemoved, deleted: record[1] });
 };
 
 exports.crudControllers = (model, sortOrder) => ({
