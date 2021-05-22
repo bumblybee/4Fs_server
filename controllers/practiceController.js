@@ -32,28 +32,28 @@ module.exports = {
     res.status(200).json({ data: records });
   },
 
-  async getLatestPractices(req, res) {
-    const { id: userId } = req.token.data;
+  // async getLatestPractices(req, res) {
+  //   const { id: userId } = req.token.data;
 
-    const latestWeek = await PracticeWeek.findOne({
-      where: { userId },
-      order: [["createdAt", "DESC"]],
-    });
+  //   const latestWeek = await PracticeWeek.findOne({
+  //     where: { userId },
+  //     order: [["createdAt", "DESC"]],
+  //   });
 
-    const records = await Practice.findAll({
-      where: {
-        [Op.and]: [
-          { isDeleted: false },
-          { practiceWeekId: latestWeek.id },
-          { userId },
-        ],
-      },
-      // For UI display purposes only, don't need all attrs. New practices will be created when user chooses start date
-      attributes: ["practice", "userId"],
-    });
+  //   const records = await Practice.findAll({
+  //     where: {
+  //       [Op.and]: [
+  //         { isDeleted: false },
+  //         { practiceWeekId: latestWeek.id },
+  //         { userId },
+  //       ],
+  //     },
+  //     // For UI display purposes only, don't need all attrs. New practices will be created when user chooses start date
+  //     attributes: ["practice", "userId"],
+  //   });
 
-    res.status(200).json({ data: records });
-  },
+  //   res.status(200).json({ data: records });
+  // },
 
   async getPracticeProgress(req, res) {
     const { id: userId } = req.token.data;
@@ -67,8 +67,6 @@ module.exports = {
         model: PracticeWeek,
         where: {
           [Op.and]: [{ endDate: { [Op.lt]: currDate }, isDeleted: false }],
-
-          [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false }],
         },
       },
       order: [["createdAt", "DESC"]],
@@ -77,61 +75,61 @@ module.exports = {
     res.status(200).json({ data: records });
   },
 
-  async upsertPractice(req, res) {
-    const id = req.params.id;
-    const { id: userId } = req.token.data;
+  // async upsertPractice(req, res) {
+  //   const id = req.params.id;
+  //   const { id: userId } = req.token.data;
 
-    if (id === "undefined") {
-      const record = await Practice.create({ ...req.body, userId });
+  //   if (id === "undefined") {
+  //     const record = await Practice.create({ ...req.body, userId });
 
-      const records = await queryCurrentPractices(userId);
+  //     const records = await queryCurrentPractices(userId);
 
-      res.status(201).json({ newRecord: record, data: records });
-      return;
-    } else {
-      const record = await Practice.update(req.body, {
-        where: { [Op.and]: [{ id }, { userId }] },
-        returning: true,
-        plain: true,
-      });
+  //     res.status(201).json({ newRecord: record, data: records });
+  //     return;
+  //   } else {
+  //     const record = await Practice.update(req.body, {
+  //       where: { [Op.and]: [{ id }, { userId }] },
+  //       returning: true,
+  //       plain: true,
+  //     });
 
-      if (!record) {
-        res.status(404).json({ message: "record.notFound" });
-        return;
-      }
+  //     if (!record) {
+  //       res.status(404).json({ message: "record.notFound" });
+  //       return;
+  //     }
 
-      const records = await queryCurrentPractices(userId);
+  //     const records = await queryCurrentPractices(userId);
 
-      res.status(201).json({ updatedRecord: record[1], data: records });
-    }
-  },
+  //     res.status(201).json({ updatedRecord: record[1], data: records });
+  //   }
+  // },
 
-  async deletePractice(req, res) {
-    const id = req.params.id;
-    const { id: userId } = req.token.data;
-    const currDate = moment().format("YYYY-MM-DD");
+  // async deletePractice(req, res) {
+  //   const id = req.params.id;
+  //   const { id: userId } = req.token.data;
+  //   const currDate = moment().format("YYYY-MM-DD");
 
-    const deletedRecord = await Practice.update(
-      { isDeleted: true },
-      {
-        where: { [Op.and]: [{ id, userId }] },
-        returning: true,
-        plain: true,
-      }
-    );
+  //   const deletedRecord = await Practice.update(
+  //     { isDeleted: true },
+  //     {
+  //       where: { [Op.and]: [{ id, userId }] },
+  //       returning: true,
+  //       plain: true,
+  //     }
+  //   );
 
-    // Get current practice records - week's end date >= today
-    const records = await Practice.findAll({
-      where: { userId, isDeleted: false },
-      include: {
-        model: PracticeWeek,
-        where: {
-          [Op.and]: [{ endDate: { [Op.gte]: currDate }, isDeleted: false }],
-        },
-      },
-      order: [["createdAt", "ASC"]],
-    });
+  //   // Get current practice records - week's end date >= today
+  //   const records = await Practice.findAll({
+  //     where: { userId, isDeleted: false },
+  //     include: {
+  //       model: PracticeWeek,
+  //       where: {
+  //         [Op.and]: [{ endDate: { [Op.gte]: currDate }, isDeleted: false }],
+  //       },
+  //     },
+  //     order: [["createdAt", "ASC"]],
+  //   });
 
-    res.status(200).json({ data: records, deletedRecord });
-  },
+  //   res.status(200).json({ data: records, deletedRecord });
+  // },
 };

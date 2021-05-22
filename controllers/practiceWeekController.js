@@ -40,7 +40,7 @@ exports.getCurrentWeek = async (req, res) => {
   res.status(200).json({ data: week });
 };
 
-exports.getPriorWeeks = async (req, res) => {
+exports.getProgressWeeks = async (req, res) => {
   const { id: userId } = req.token.data;
   const currDate = moment().format("YYYY-MM-DD");
 

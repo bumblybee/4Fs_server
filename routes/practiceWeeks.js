@@ -7,7 +7,7 @@ router.route("/").post(errorWrapper(controllers.setNewWeek));
 
 router.route("/current").get(controllers.getCurrentWeek);
 
-router.route("/prior").get(controllers.getPriorWeeks);
+router.route("/prior").get(controllers.getProgressWeeks);
 
 router.route("/:id").delete(errorWrapper(controllers.deleteCurrentWeek));
 

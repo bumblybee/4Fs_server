@@ -14,8 +14,8 @@ router.route("/prior").get(controllers.getPracticeProgress);
 
 router
   .route("/:id")
-  .post(errorWrapper(controllers.upsertPractice))
+  .post(errorWrapper(controllers.updateOrCreate))
   .put(errorWrapper(controllers.updateOne))
-  .delete(errorWrapper(controllers.deletePractice));
+  .delete(errorWrapper(controllers.deleteOne));
 
 module.exports = router;
