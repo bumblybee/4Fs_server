@@ -59,12 +59,16 @@ module.exports = {
     const { id: userId } = req.token.data;
     const currDate = moment().format("YYYY-MM-DD");
 
+    // Get user's practice records where PracticeWeek endDate prior to today
+
     const records = await Practice.findAll({
       where: { userId, isDeleted: false },
       include: {
         model: PracticeWeek,
         where: {
           [Op.and]: [{ endDate: { [Op.lt]: currDate }, isDeleted: false }],
+
+          [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false }],
         },
       },
       order: [["createdAt", "DESC"]],
