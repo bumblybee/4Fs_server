@@ -4,10 +4,7 @@ const controllers = require("../controllers/practiceController");
 const practiceStoreController = require("../controllers/practiceStoreController");
 const { errorWrapper } = require("../handlers/errorHandlers");
 
-router
-  .route("/")
-  .get(controllers.getMany)
-  .post(errorWrapper(controllers.createOne));
+router.route("/").get(controllers.getMany);
 
 router.route("/current").get(controllers.getCurrentWeeksPractices);
 // router.route("/latest").get(controllers.getLatestPractices);

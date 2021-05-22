@@ -5,7 +5,7 @@ const { PracticeStore } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
 
-const queryCurrentPractices = async (userId) => {
+const queryCurrentPractices = async (userId, sortOrder) => {
   const currDate = moment().format("YYYY-MM-DD");
 
   // Get current practice records - week's end date >= today
@@ -17,7 +17,7 @@ const queryCurrentPractices = async (userId) => {
         [Op.and]: [{ endDate: { [Op.gte]: currDate }, isDeleted: false }],
       },
     },
-    order: [["createdAt", "ASC"]],
+    order: sortOrder && [sortOrder],
   });
 
   return practices;
@@ -28,33 +28,10 @@ module.exports = {
 
   async getCurrentWeeksPractices(req, res) {
     const { id: userId } = req.token.data;
-    const records = await queryCurrentPractices(userId);
+    const records = await queryCurrentPractices(userId, ["createdAt", "ASC"]);
 
     res.status(200).json({ data: records });
   },
-
-  // async getLatestPractices(req, res) {
-  //   const { id: userId } = req.token.data;
-
-  //   const latestWeek = await PracticeWeek.findOne({
-  //     where: { userId },
-  //     order: [["createdAt", "DESC"]],
-  //   });
-
-  //   const records = await Practice.findAll({
-  //     where: {
-  //       [Op.and]: [
-  //         { isDeleted: false },
-  //         { practiceWeekId: latestWeek.id },
-  //         { userId },
-  //       ],
-  //     },
-  //     // For UI display purposes only, don't need all attrs. New practices will be created when user chooses start date
-  //     attributes: ["practice", "userId"],
-  //   });
-
-  //   res.status(200).json({ data: records });
-  // },
 
   async getPracticeProgress(req, res) {
     const { id: userId } = req.token.data;
@@ -85,21 +62,24 @@ module.exports = {
 
       await PracticeStore.create({ practice: req.body.practice, userId });
 
-      const records = await queryCurrentPractices(userId);
+      const records = await queryCurrentPractices(userId, ["createdAt", "ASC"]);
 
       res.status(201).json({ newRecord: record, data: records });
       return;
     } else {
+      console.log(1);
       const origPractice = await Practice.findOne({
         where: { id },
         attributes: ["practice"],
       });
+      console.log(2);
 
       const record = await Practice.update(req.body, {
         where: { [Op.and]: [{ id }, { userId }] },
         returning: true,
         plain: true,
       });
+      console.log(3);
 
       if (req.body.practice && record) {
         await PracticeStore.update(req.body, {
@@ -108,13 +88,16 @@ module.exports = {
           },
         });
       }
+      console.log(4);
 
       if (!record) {
         res.status(404).json({ message: "record.notFound" });
         return;
       }
 
-      const records = await queryCurrentPractices(userId);
+      const records = await queryCurrentPractices(userId, ["id", "ASC"]);
+
+      console.log(5);
 
       res.status(201).json({ updatedRecord: record[1], data: records });
     }
@@ -150,7 +133,7 @@ module.exports = {
     }
 
     // Get current practice records - week's end date >= today
-    const records = await queryCurrentPractices(userId);
+    const records = await queryCurrentPractices(userId, ["createdAt", "ASC"]);
 
     res.status(200).json({ data: records, deletedRecord });
   },

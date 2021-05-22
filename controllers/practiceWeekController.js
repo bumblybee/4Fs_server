@@ -23,7 +23,7 @@ exports.setNewWeek = async (req, res) => {
       { startDate, endDate, userId, practices: storedPractices },
       { include: [Practice] }
     );
-    res.status(201).json({ data: [record] });
+    res.status(201).json({ data: record });
   } else {
     throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
   }
@@ -42,7 +42,7 @@ exports.getCurrentWeek = async (req, res) => {
     include: Practice,
   });
 
-  res.status(200).json({ data: week });
+  res.status(200).json({ data: week[0] });
 };
 
 exports.getProgressWeeks = async (req, res) => {
