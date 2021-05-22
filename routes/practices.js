@@ -9,13 +9,13 @@ router
   .post(errorWrapper(controllers.createOne));
 
 router.route("/current").get(controllers.getCurrentWeeksPractices);
-router.route("/latest").get(controllers.getLatestPractices);
-router.route("/prior").get(controllers.getPracticeProgress);
+// router.route("/latest").get(controllers.getLatestPractices);
+router.route("/progress").get(controllers.getPracticeProgress);
 
 router
   .route("/:id")
-  .post(errorWrapper(controllers.updateOrCreate))
+  .post(errorWrapper(controllers.upsertPractice))
   .put(errorWrapper(controllers.updateOne))
-  .delete(errorWrapper(controllers.deleteOne));
+  .delete(errorWrapper(controllers.deletePractice));
 
 module.exports = router;
