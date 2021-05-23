@@ -6,9 +6,10 @@ const { errorWrapper } = require("../handlers/errorHandlers");
 
 router.route("/").get(controllers.getMany);
 
-router.route("/current").get(controllers.getCurrentWeeksPractices);
-// router.route("/latest").get(controllers.getLatestPractices);
+router.route("/current").get(controllers.getCurrentPractices);
+
 router.route("/progress").get(controllers.getPracticeProgress);
+
 router.route("/store").get(practiceStoreController.getStoredPractices);
 
 router

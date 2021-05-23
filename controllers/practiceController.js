@@ -26,7 +26,7 @@ const queryCurrentPractices = async (userId, sortOrder) => {
 module.exports = {
   ...crudControllers(Practice, ["createdAt", "ASC"]),
 
-  async getCurrentWeeksPractices(req, res) {
+  async getCurrentPractices(req, res) {
     const { id: userId } = req.token.data;
     const records = await queryCurrentPractices(userId, ["createdAt", "ASC"]);
 
@@ -67,19 +67,16 @@ module.exports = {
       res.status(201).json({ newRecord: record, data: records });
       return;
     } else {
-      console.log(1);
       const origPractice = await Practice.findOne({
         where: { id },
         attributes: ["practice"],
       });
-      console.log(2);
 
       const record = await Practice.update(req.body, {
         where: { [Op.and]: [{ id }, { userId }] },
         returning: true,
         plain: true,
       });
-      console.log(3);
 
       if (req.body.practice && record) {
         await PracticeStore.update(req.body, {
@@ -88,7 +85,6 @@ module.exports = {
           },
         });
       }
-      console.log(4);
 
       if (!record) {
         res.status(404).json({ message: "record.notFound" });
@@ -96,8 +92,6 @@ module.exports = {
       }
 
       const records = await queryCurrentPractices(userId, ["id", "ASC"]);
-
-      console.log(5);
 
       res.status(201).json({ updatedRecord: record[1], data: records });
     }
@@ -132,7 +126,6 @@ module.exports = {
       );
     }
 
-    // Get current practice records - week's end date >= today
     const records = await queryCurrentPractices(userId, ["createdAt", "ASC"]);
 
     res.status(200).json({ data: records, deletedRecord });
