@@ -7,7 +7,7 @@ const milestones = [
   },
   {
     f: "Fasting",
-    milestone: "Go Normally without food for 16-20 hrs.",
+    milestone: "Go normally without food for 16-20 hrs.",
   },
   {
     f: "Food",

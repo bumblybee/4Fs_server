@@ -5,24 +5,6 @@ const { PracticeStore } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
 
-const queryCurrentPractices = async (userId, sortOrder) => {
-  const currDate = moment().format("YYYY-MM-DD");
-
-  // Get current practice records - week's end date >= today
-  const practices = await Practice.findAll({
-    where: { userId, isDeleted: false },
-    include: {
-      model: PracticeWeek,
-      where: {
-        [Op.and]: [{ endDate: { [Op.gte]: currDate }, isDeleted: false }],
-      },
-    },
-    order: sortOrder && [sortOrder],
-  });
-
-  return practices;
-};
-
 module.exports = {
   ...crudControllers(Practice, ["createdAt", "ASC"]),
 
@@ -130,4 +112,22 @@ module.exports = {
 
     res.status(200).json({ data: records, deletedRecord });
   },
+};
+
+const queryCurrentPractices = async (userId, sortOrder) => {
+  const currDate = moment().format("YYYY-MM-DD");
+
+  // Get current practice records - week's end date >= today
+  const practices = await Practice.findAll({
+    where: { userId, isDeleted: false },
+    include: {
+      model: PracticeWeek,
+      where: {
+        [Op.and]: [{ endDate: { [Op.gte]: currDate }, isDeleted: false }],
+      },
+    },
+    order: sortOrder && [sortOrder],
+  });
+
+  return practices;
 };

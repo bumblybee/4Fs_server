@@ -10,7 +10,7 @@ router
 
 router
   .route("/:id")
-  .post(errorWrapper(controllers.updateOrCreate))
+  .post(errorWrapper(controllers.upsertSleep))
   .put(errorWrapper(controllers.updateOne))
   .delete(errorWrapper(controllers.deleteOne));
 

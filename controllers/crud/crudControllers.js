@@ -54,7 +54,7 @@ exports.createOne = (model) => async (req, res) => {
   res.status(201).json({ data: record });
 };
 
-exports.updateOne = (model) => async (req, res) => {
+exports.updateOne = (model, sortOrder) => async (req, res) => {
   const id = req.params.id;
 
   const { id: userId } = req.token.data;
@@ -64,13 +64,23 @@ exports.updateOne = (model) => async (req, res) => {
     returning: true,
     plain: true,
   });
+
   if (!record) {
     res.status(404).json({ message: "record.notFound" });
   }
-  res.status(201).json({ data: record[1] });
+
+  const records = await model.findAll({
+    where: { [Op.and]: [{ userId }, { isDeleted: false }] },
+    attributes: {
+      exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
+    },
+    order: [sortOrder],
+  });
+
+  res.status(201).json({ updatedRecord: record[1], data: records });
 };
 
-exports.updateOrCreate = (model) => async (req, res) => {
+exports.updateOrCreate = (model, sortOrder) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
 
@@ -82,6 +92,7 @@ exports.updateOrCreate = (model) => async (req, res) => {
       attributes: {
         exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
       },
+      order: [sortOrder],
     });
 
     res.status(201).json({ newRecord: record, data: records });
@@ -103,13 +114,14 @@ exports.updateOrCreate = (model) => async (req, res) => {
       attributes: {
         exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
       },
+      order: [sortOrder],
     });
 
     res.status(201).json({ updatedRecord: record[1], data: records });
   }
 };
 
-exports.deleteOne = (model) => async (req, res) => {
+exports.deleteOne = (model, sortOrder) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
 
@@ -127,7 +139,7 @@ exports.deleteOne = (model) => async (req, res) => {
     attributes: {
       exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
     },
-    order: [["createdAt", "ASC"]],
+    order: [sortOrder] || [["createdAt", "ASC"]],
   });
 
   if (!record) {
@@ -137,11 +149,11 @@ exports.deleteOne = (model) => async (req, res) => {
   res.status(200).json({ data: recordsWithRecordRemoved, deleted: record[1] });
 };
 
-exports.crudControllers = (model, sortOrder) => ({
+exports.crudControllers = (model, getOrder, updateOrder, deleteOrder) => ({
   getOne: this.getOne(model),
-  getMany: this.getMany(model, sortOrder),
+  getMany: this.getMany(model, getOrder),
   createOne: this.createOne(model),
-  updateOne: this.updateOne(model),
-  updateOrCreate: this.updateOrCreate(model),
-  deleteOne: this.deleteOne(model),
+  updateOne: this.updateOne(model, updateOrder),
+  updateOrCreate: this.updateOrCreate(model, updateOrder),
+  deleteOne: this.deleteOne(model, deleteOrder),
 });

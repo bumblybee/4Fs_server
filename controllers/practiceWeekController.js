@@ -59,25 +59,6 @@ exports.getProgressWeeks = async (req, res) => {
   res.status(200).json({ data: week });
 };
 
-// exports.setNewWeek = async (req, res) => {
-//   const { id: userId } = req.token.data;
-//   const { startDate } = req.body;
-//   const validDate = moment(startDate).isSameOrAfter(
-//     moment().format("YYYY-MM-DD")
-//   );
-
-//   // Safety measure - check if start date >= today before creating record
-//   if (validDate) {
-//     const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
-
-//     const record = await PracticeWeek.create({ startDate, endDate, userId });
-
-//     res.status(201).json({ data: record });
-//   } else {
-//     throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
-//   }
-// };
-
 exports.deleteCurrentWeek = async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
