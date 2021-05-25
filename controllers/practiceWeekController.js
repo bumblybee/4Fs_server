@@ -10,23 +10,23 @@ exports.setNewWeek = async (req, res) => {
   const validDate = moment(startDate).isSameOrAfter(currDate);
 
   // Safety measure - check if start date >= today before creating record
-  if (validDate) {
-    const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
+  // if (validDate) {
+  const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
 
-    const storedPractices = await PracticeStore.findAll({
-      where: { [Op.and]: [{ userId }, { isDeleted: false }] },
-      attributes: ["practice", "userId"],
-    });
+  const storedPractices = await PracticeStore.findAll({
+    where: { [Op.and]: [{ userId }, { isDeleted: false }] },
+    attributes: ["practice", "userId"],
+  });
 
-    const record = await PracticeWeek.create(
-      // Include last practices in current week creation
-      { startDate, endDate, userId, practices: storedPractices },
-      { include: [Practice] }
-    );
-    res.status(201).json({ data: record });
-  } else {
-    throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
-  }
+  const record = await PracticeWeek.create(
+    // Include last practices in current week creation
+    { startDate, endDate, userId, practices: storedPractices },
+    { include: [Practice] }
+  );
+  res.status(201).json({ data: record });
+  // } else {
+  //   throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
+  // }
 };
 
 exports.getCurrentWeek = async (req, res) => {

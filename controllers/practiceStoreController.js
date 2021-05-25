@@ -1,12 +1,9 @@
-const { PracticeStore, Practice } = require("../db");
-const { Op } = require("sequelize");
+const { PracticeStore } = require("../db");
+const { crudControllers } = require("../controllers/crud/crudControllers");
 
-exports.getStoredPractices = async (req, res) => {
-  const { id: userId } = req.token.data;
-
-  const storedPractices = await PracticeStore.findAll({
-    where: { [Op.and]: [{ userId }, { isDeleted: false }] },
-  });
-
-  res.status(200).json({ data: storedPractices });
-};
+module.exports = crudControllers(
+  PracticeStore,
+  ["createdAt", "ASC"],
+  ["createdAt", "ASC"],
+  ["createdAt", "ASC"]
+);

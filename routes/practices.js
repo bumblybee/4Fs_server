@@ -10,7 +10,12 @@ router.route("/current").get(controllers.getCurrentPractices);
 
 router.route("/progress").get(controllers.getPracticeProgress);
 
-router.route("/store").get(practiceStoreController.getStoredPractices);
+router.route("/store").get(practiceStoreController.getMany);
+
+router
+  .route("/store/:id")
+  .post(errorWrapper(practiceStoreController.updateOrCreate))
+  .delete(errorWrapper(practiceStoreController.deleteOne));
 
 router
   .route("/:id")

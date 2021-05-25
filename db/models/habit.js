@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       habitGoal: {
         type: DataTypes.STRING,
-        allowNull: false,
         field: "habit_goal",
       },
       reward: {

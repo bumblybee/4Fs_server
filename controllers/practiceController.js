@@ -19,8 +19,7 @@ module.exports = {
     const { id: userId } = req.token.data;
     const currDate = moment().format("YYYY-MM-DD");
 
-    // Get user's practice records where PracticeWeek endDate prior to today
-
+    // Get practice records where PracticeWeek endDate prior to today
     const records = await Practice.findAll({
       where: { userId, isDeleted: false },
       include: {
@@ -35,10 +34,12 @@ module.exports = {
     res.status(200).json({ data: records });
   },
 
+  // Clean up with upsert() and break some logic out into separate fns
   async upsertPractice(req, res) {
     const id = req.params.id;
     const { id: userId } = req.token.data;
 
+    // If no id, record doesn't already exist = create
     if (id === "undefined") {
       const record = await Practice.create({ ...req.body, userId });
 
@@ -49,33 +50,37 @@ module.exports = {
       res.status(201).json({ newRecord: record, data: records });
       return;
     } else {
-      const origPractice = await Practice.findOne({
-        where: { id },
-        attributes: ["practice"],
-      });
-
-      const record = await Practice.update(req.body, {
-        where: { [Op.and]: [{ id }, { userId }] },
-        returning: true,
-        plain: true,
-      });
-
-      if (req.body.practice && record) {
-        await PracticeStore.update(req.body, {
-          where: {
-            [Op.and]: [{ userId }, { practice: origPractice.practice }],
-          },
+      // Checking for null so practice doesn't update if no value (they've cleared the input) - better solution here and on client?
+      if (req.body.practice !== null) {
+        const origRecord = await Practice.findOne({
+          where: { id },
+          attributes: ["practice"],
         });
-      }
 
-      if (!record) {
-        res.status(404).json({ message: "record.notFound" });
-        return;
+        const record = await Practice.update(req.body, {
+          where: { [Op.and]: [{ id }, { userId }] },
+          returning: true,
+          plain: true,
+        });
+
+        // Update practice store if curr practice updated
+        if (req.body.practice && record) {
+          await PracticeStore.update(req.body, {
+            where: {
+              [Op.and]: [{ userId }, { practice: origRecord.practice }],
+            },
+          });
+        }
+
+        if (!record) {
+          res.status(404).json({ message: "record.notFound" });
+          return;
+        }
       }
 
       const records = await queryCurrentPractices(userId, ["id", "ASC"]);
 
-      res.status(201).json({ updatedRecord: record[1], data: records });
+      res.status(201).json({ data: records });
     }
   },
 
@@ -83,7 +88,7 @@ module.exports = {
     const id = req.params.id;
     const { id: userId } = req.token.data;
 
-    const origPractice = await Practice.findOne({
+    const origRecord = await Practice.findOne({
       where: { id },
       attributes: ["practice"],
     });
@@ -98,11 +103,12 @@ module.exports = {
     );
 
     if (deletedRecord) {
+      // Find practiceStore record with same title and flag deleted
       await PracticeStore.update(
         { isDeleted: true },
         {
           where: {
-            [Op.and]: [{ userId }, { practice: origPractice.practice }],
+            [Op.and]: [{ userId }, { practice: origRecord.practice }],
           },
         }
       );
