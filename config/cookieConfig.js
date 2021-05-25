@@ -1,5 +1,3 @@
-//********** Cookie Config ************/
-
 const cookieEnvConfig = {};
 
 if (process.env.NODE_ENV === "production") {
