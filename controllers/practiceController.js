@@ -78,7 +78,7 @@ module.exports = {
         }
       }
 
-      const records = await queryCurrentPractices(userId, ["createdAt", "ASC"]);
+      const records = await queryCurrentPractices(userId, ["id", "ASC"]);
 
       res.status(201).json({ data: records });
     }
