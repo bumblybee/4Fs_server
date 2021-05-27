@@ -10,7 +10,7 @@ module.exports = {
 
   async getCurrentPractices(req, res) {
     const { id: userId } = req.token.data;
-    const records = await queryCurrentPractices(userId, ["createdAt", "ASC"]);
+    const records = await queryCurrentPractices(userId, ["id", "ASC"]);
 
     res.status(200).json({ data: records });
   },

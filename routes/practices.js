@@ -12,7 +12,7 @@ router.route("/store").get(practiceStoreController.getMany);
 
 router
   .route("/store/:id")
-  .post(errorWrapper(practiceStoreController.updateOrCreate))
+  .post(errorWrapper(practiceStoreController.upsertStoredPractice))
   .delete(errorWrapper(practiceStoreController.deleteOne));
 
 router
