@@ -14,7 +14,7 @@ const adminRouter = require("./routes/admin");
 const usersRouter = require("./routes/users");
 const accomplishmentsRouter = require("./routes/accomplishments");
 const beliefsRouter = require("./routes/beliefs");
-const fastingWindowRouter = require("./routes/fastingWindows");
+const fastingRouter = require("./routes/fasting");
 const habitsRouter = require("./routes/habits");
 const milestonesRouter = require("./routes/milestones");
 const momentsRouter = require("./routes/moments");
@@ -51,7 +51,7 @@ app.use("/users", usersRouter);
 
 app.use("/accomplishments", isAuth, accomplishmentsRouter);
 app.use("/beliefs", isAuth, beliefsRouter);
-app.use("/fasting-window", isAuth, fastingWindowRouter);
+app.use("/fasting", isAuth, fastingRouter);
 app.use("/habits", isAuth, habitsRouter);
 app.use("/milestones", isAuth, milestonesRouter);
 app.use("/moments", isAuth, momentsRouter);
