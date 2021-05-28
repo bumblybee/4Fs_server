@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         field: "today_window",
       },
       performed: {
-        type: DataTypes.Sequelize.DECIMAL(10, 2),
+        type: DataTypes.DECIMAL(10, 2),
         field: "performed",
         allowNull: false,
       },
@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     },
 
-    { tableName: "fasting_window" }
+    { tableName: "fasting" }
   );
 
   return Fasting;
