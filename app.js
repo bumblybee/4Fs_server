@@ -23,6 +23,7 @@ const skillsRouter = require("./routes/skills");
 const sleepRouter = require("./routes/sleep");
 const practicesRouter = require("./routes/practices");
 const practiceWeeksRouter = require("./routes/practiceWeeks");
+const sharedRouter = require("./routes/shared");
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use("/skills", isAuth, skillsRouter);
 app.use("/sleep", isAuth, sleepRouter);
 app.use("/practices", isAuth, practicesRouter);
 app.use("/practice-weeks", isAuth, practiceWeeksRouter);
+app.use("/shared", isAuth, sharedRouter);
 
 app.use(errorHandlers.sequelizeErrorHandler);
 app.use(errorHandlers.notFound);

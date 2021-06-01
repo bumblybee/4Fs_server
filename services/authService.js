@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const { Op } = require("sequelize");
 const { RESET_PASSWORD_URL } = require("../config/passwordResetConfig");
 const { Milestone } = require("../db");
+const { Shared } = require("../db");
 const emailHandler = require("../handlers/emailHandler");
 const {
   generateUserMilestones,
@@ -30,6 +31,7 @@ exports.generateJWT = (user) => {
 exports.getUser = async (id) => {
   const user = await User.findOne({
     where: { id },
+    include: { model: Shared },
     attributes: {
       exclude: [
         "password",
@@ -77,6 +79,7 @@ exports.signupUser = async (user) => {
 
       const createdMilestones = await Milestone.bulkCreate(...userMilestones);
 
+      Shared.create({ userId: createdUser.id });
       // Pull password out of createdUser before sending
       const userData = {
         firstName: createdUser.firstName,

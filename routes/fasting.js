@@ -8,6 +8,8 @@ router
   .get(controllers.getMany)
   .post(errorWrapper(controllers.upsertFasting));
 
+router.route("/shared").post(errorWrapper(controllers.updateAll));
+
 router
   .route("/:id")
   .post(errorWrapper(controllers.updateOrCreate))

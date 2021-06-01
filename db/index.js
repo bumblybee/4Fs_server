@@ -15,6 +15,7 @@ const SleepModel = require("./models/sleep.js");
 const PracticeModel = require("./models/practice.js");
 const PracticeWeekModel = require("./models/practiceWeek.js");
 const PracticeStoreModel = require("./models/practiceStore.js");
+const SharedModel = require("./models/shared.js");
 const UserModel = require("./models/user.js");
 
 // Database environment config
@@ -53,6 +54,7 @@ const Sleep = SleepModel(sequelize, Sequelize);
 const PracticeWeek = PracticeWeekModel(sequelize, Sequelize);
 const PracticeStore = PracticeStoreModel(sequelize, Sequelize);
 const Practice = PracticeModel(sequelize, Sequelize);
+const Shared = SharedModel(sequelize, Sequelize);
 const User = UserModel(sequelize, Sequelize);
 
 // Relationships
@@ -67,6 +69,7 @@ User.hasMany(Sleep);
 User.hasMany(Practice);
 User.hasMany(PracticeWeek);
 User.hasMany(PracticeStore);
+User.hasOne(Shared);
 PracticeWeek.hasMany(Practice);
 
 Accomplishment.belongsTo(User);
@@ -81,6 +84,7 @@ PracticeWeek.belongsTo(User);
 PracticeStore.belongsTo(User);
 Practice.belongsTo(User);
 Practice.belongsTo(PracticeWeek);
+Shared.belongsTo(User);
 
 // Authenticate db and log connection or err
 sequelize
@@ -104,4 +108,5 @@ module.exports = {
   PracticeWeek,
   PracticeStore,
   User,
+  Shared,
 };
