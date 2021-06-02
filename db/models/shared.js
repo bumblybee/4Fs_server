@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: true,
         field: "fasting",
       },
-      practice: {
+      system: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         field: "practice",
@@ -39,6 +39,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         field: "swagger",
+      },
+      food: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        field: "food",
+      },
+      fitness: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        field: "fitness",
       },
       isDeleted: {
         type: DataTypes.BOOLEAN,

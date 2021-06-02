@@ -8,6 +8,8 @@ module.exports = {
 
     const record = await Shared.update(req.body, { where: { userId } });
 
-    res.status(200).json({ data: record });
+    const records = await Shared.findAll();
+
+    res.status(200).json({ data: records });
   },
 };
