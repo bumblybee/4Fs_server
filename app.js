@@ -29,7 +29,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://four-fs.herokuapp.com/"],
+    origin: ["http://localhost:3000", "https://four-fs.herokuapp.com"],
 
     credentials: true,
   })
