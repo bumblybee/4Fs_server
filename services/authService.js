@@ -165,6 +165,7 @@ exports.updateUser = async (id, changes) => {
     weight: record[1].weight,
     height: record[1].height,
     age: record[1].age,
+    phone: record[1].phone,
     gender: record[1].gender,
     sheetsURL: record[1].sheetsURL,
   };
