@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 const crypto = require("crypto");
 const { Op } = require("sequelize");
+const { logger } = require("../handlers/logger");
 const { RESET_PASSWORD_URL } = require("../config/passwordResetConfig");
 const { Milestone } = require("../db");
 const { Shared } = require("../db");
@@ -79,7 +80,9 @@ exports.signupUser = async (user) => {
 
       const createdMilestones = await Milestone.bulkCreate(...userMilestones);
 
+      // Create Shared record for user
       Shared.create({ userId: createdUser.id });
+
       // Pull password out of createdUser before sending
       const userData = {
         firstName: createdUser.firstName,
@@ -91,9 +94,13 @@ exports.signupUser = async (user) => {
         gender: createdUser.gender,
       };
 
+      logger.info(
+        `New User Sign Up - user id: ${createdUser.id}, name: ${createdUser.firstName} ${createdUser.lastName}, email: ${createdUser.email}, admin: ${createdUser.isAdmin}`
+      );
+
       return { jwt, userData, createdMilestones };
     } else {
-      throw new Error("auth.failedSignup", "SignupError", 401);
+      throw new CustomError("auth.failedSignup", "SignupError", 401);
     }
   }
 };
@@ -105,7 +112,7 @@ exports.loginUser = async (user) => {
 
   if (!userRecord) {
     // Handle login failure
-    throw new CustomError("auth.invalidCredentials", "LoginError", 403);
+    throw new CustomError("auth.invalidCredentials", "LoginError", 401);
   }
 
   const correctPassword = await argon2.verify(userRecord.password, password);
@@ -158,6 +165,10 @@ exports.updateUser = async (id, changes) => {
     throw new Error("auth.userNotFound", "userError", 403);
   }
 
+  logger.info(
+    `User Data Updated - user id: ${id}, name: ${record.firstName} ${record.lastName}, email: ${record.email}, admin: ${record.isAdmin}`
+  );
+
   const userData = {
     firstName: record[1].firstName,
     lastName: record[1].lastName,
@@ -174,15 +185,24 @@ exports.updateUser = async (id, changes) => {
 };
 
 exports.generatePasswordReset = async (email) => {
+  logger.info(`Password reset initiated for ${email}`);
+
   const userRecord = await User.findOne({ where: { email } });
 
   const resetToken = crypto.randomBytes(25).toString("hex");
   const resetExpiry = Date.now() + 1000 * 60 * 60;
 
+  if (!userRecord)
+    logger.warn(`Password Reset Rejection. No record for ${email}`);
+
   if (userRecord) {
     await User.update(
       { resetPasswordToken: resetToken, resetPasswordExpiry: resetExpiry },
       { where: { email } }
+    );
+
+    logger.info(
+      `Password Reset Request Successful - user id: ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName}, email: ${userRecord.email}, admin: ${userRecord.isAdmin}`
     );
 
     const resetPasswordUrl = `${RESET_PASSWORD_URL}/${resetToken}`;
@@ -194,6 +214,8 @@ exports.generatePasswordReset = async (email) => {
       resetPasswordUrl,
     });
   }
+
+  logger.info(`Password reset email sent to ${email}`);
 
   return { userRecord };
 };
@@ -210,8 +232,12 @@ exports.passwordReset = async (token, password) => {
     const hashedPassword = await argon2.hash(password);
 
     await userRecord.update({ password: hashedPassword });
+
+    logger.info(
+      `Password Reset Successful - user id ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName} email: ${userRecord.email}`
+    );
   } else {
-    throw new CustomError("auth.invalidCredentials", "passwordResetError", 401);
+    throw new CustomError("auth.noToken", "PasswordResetError", 401);
   }
 
   return { userRecord };
