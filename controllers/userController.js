@@ -67,11 +67,7 @@ exports.generatePasswordResetLink = async (req, res) => {
   const { email } = req.body;
 
   const { userRecord } = authService.generatePasswordReset(email);
-  console.log(userRecord);
 
-  if (!userRecord) {
-    res.json({ message: "An email has been sent to the address provided." });
-  }
   res.json({ message: "An email has been sent to the address provided." });
 };
 

@@ -193,7 +193,7 @@ exports.generatePasswordReset = async (email) => {
   const resetExpiry = Date.now() + 1000 * 60 * 60;
 
   if (!userRecord)
-    logger.warn(`Password Reset Rejection. No record for ${email}`);
+    logger.warn(`Password Reset Rejected. No record for ${email}`);
 
   if (userRecord) {
     await User.update(
@@ -202,7 +202,7 @@ exports.generatePasswordReset = async (email) => {
     );
 
     logger.info(
-      `Password Reset Request Successful - user id: ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName}, email: ${userRecord.email}, admin: ${userRecord.isAdmin}`
+      `Password Reset Request - user id: ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName}, email: ${userRecord.email}, admin: ${userRecord.isAdmin}`
     );
 
     const resetPasswordUrl = `${RESET_PASSWORD_URL}/${resetToken}`;
@@ -213,9 +213,9 @@ exports.generatePasswordReset = async (email) => {
       user: { email },
       resetPasswordUrl,
     });
-  }
 
-  logger.info(`Password reset email sent to ${email}`);
+    logger.info(`Password reset email sent to ${email}`);
+  }
 
   return { userRecord };
 };
