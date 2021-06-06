@@ -2,7 +2,7 @@ const { PracticeWeek, Practice, PracticeStore } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
 const { CustomError } = require("../handlers/errorHandlers");
-const { logger, loggingFormatter } = require("../../handlers/logger");
+const { logger, loggingFormatter } = require("../handlers/logger");
 
 exports.setNewWeek = async (req, res) => {
   const { id: userId } = req.token.data;
@@ -25,7 +25,9 @@ exports.setNewWeek = async (req, res) => {
       { include: [Practice] }
     );
 
-    logger.info(loggingFormatter("Record Created", record.dataValues));
+    logger.info(
+      loggingFormatter("System Week Record Created", record.dataValues)
+    );
 
     res.status(201).json({ data: record });
   } else {
@@ -73,7 +75,10 @@ exports.deleteCurrentWeek = async (req, res) => {
     );
 
     logger.info(
-      loggingFormatter("Record Flagged Deleted", deletedRecord[1].dataValues)
+      loggingFormatter(
+        "System Week Record Flagged Deleted",
+        deletedWeek[1].dataValues
+      )
     );
   }
 

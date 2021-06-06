@@ -19,7 +19,9 @@ module.exports = {
     if (!origRecord) {
       const record = await Fasting.create({ ...req.body, userId });
 
-      logger.info(loggingFormatter("Record Created", record.dataValues));
+      logger.info(
+        loggingFormatter("Fasting Record Created", record.dataValues)
+      );
 
       const records = await queryFastingRecords(userId);
 
@@ -32,7 +34,9 @@ module.exports = {
         plain: true,
       });
 
-      logger.info(loggingFormatter("Record Updated", record[1].dataValues));
+      logger.info(
+        loggingFormatter("Fasting Record Updated", record[1].dataValues)
+      );
 
       const records = await queryFastingRecords(userId);
 

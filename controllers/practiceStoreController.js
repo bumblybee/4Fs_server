@@ -1,7 +1,7 @@
 const { PracticeStore } = require("../db");
 const { crudControllers } = require("../controllers/crud/crudControllers");
 const { Op } = require("sequelize");
-const { logger, loggingFormatter } = require("../../handlers/logger");
+const { logger, loggingFormatter } = require("../handlers/logger");
 
 module.exports = {
   ...crudControllers(
@@ -19,7 +19,9 @@ module.exports = {
     if (id === "undefined") {
       const record = await PracticeStore.create({ ...req.body, userId });
 
-      logger.info(loggingFormatter("Record Created", record.dataValues));
+      logger.info(
+        loggingFormatter("Stored Practice Created", record.dataValues)
+      );
 
       const records = await PracticeStore.findAll({
         where: { [Op.and]: [{ userId }, { isDeleted: false }] },
@@ -37,7 +39,9 @@ module.exports = {
           plain: true,
         });
 
-        logger.info(loggingFormatter("Record Updated", record[1].dataValues));
+        logger.info(
+          loggingFormatter("Stored Practice Updated", record[1].dataValues)
+        );
       }
 
       const records = await PracticeStore.findAll({

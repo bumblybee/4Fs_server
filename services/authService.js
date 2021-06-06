@@ -131,6 +131,10 @@ exports.loginUser = async (user) => {
     email: userRecord.email,
   };
 
+  logger.info(
+    `User Log In - user id: ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName}, email: ${userRecord.email}, admin: ${userRecord.isAdmin}`
+  );
+
   return {
     jwt,
     userData,
