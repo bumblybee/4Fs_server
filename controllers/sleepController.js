@@ -2,6 +2,7 @@ const { crudControllers } = require("./crud/crudControllers");
 const { Sleep } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
+const { logger, loggingFormatter } = require("../handlers/logger");
 
 module.exports = {
   ...crudControllers(Sleep, ["date", "ASC"], null, ["date", "ASC"]),
@@ -14,6 +15,8 @@ module.exports = {
       req.body.hoursSlept = calculateHoursSlept(req.body.woke, req.body.toBed);
 
       const record = await Sleep.create({ ...req.body, userId });
+
+      logger.info(loggingFormatter("Sleep Record Created", record.dataValues));
 
       const records = await Sleep.findAll({
         where: { [Op.and]: [{ userId }, { isDeleted: false }] },
@@ -54,10 +57,9 @@ module.exports = {
         include: Sleep,
       });
 
-      if (!record) {
-        res.status(404).json({ message: "record.notFound" });
-        return;
-      }
+      logger.info(
+        loggingFormatter("Sleep Record Updated", record[1].dataValues)
+      );
 
       const records = await Sleep.findAll({
         where: { [Op.and]: [{ userId }, { isDeleted: false }] },
