@@ -10,7 +10,6 @@ const { isAuth } = require("./middleware/isAuth");
 const { authRole } = require("./middleware/authRole");
 const roles = require("./enums/roles");
 
-const exampleRouter = require("./routes/example");
 const adminRouter = require("./routes/admin");
 const usersRouter = require("./routes/users");
 const accomplishmentsRouter = require("./routes/accomplishments");
@@ -43,13 +42,13 @@ app.use(compression());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-app.use(logger("dev"));
+
+const morganLogStyle = app.get("env") === "development" ? "dev" : "common";
+app.use(logger(morganLogStyle));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
-app.use("/example", exampleRouter);
 
 app.use("/admin", [isAuth, authRole(roles.Admin)], adminRouter);
 app.use("/users", usersRouter);

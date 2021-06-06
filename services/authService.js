@@ -166,7 +166,7 @@ exports.updateUser = async (id, changes) => {
   }
 
   logger.info(
-    `User Data Updated - user id: ${id}, name: ${record.firstName} ${record.lastName}, email: ${record.email}, admin: ${record.isAdmin}`
+    `User Data Updated - user id: ${id}, name: ${record[1].firstName} ${record[1].lastName}, email: ${record[1].email}, admin: ${record[1].isAdmin}`
   );
 
   const userData = {
