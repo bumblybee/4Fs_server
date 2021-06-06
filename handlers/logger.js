@@ -20,3 +20,13 @@ const logger = winston.createLogger({
 winston.addColors({ error: "red", info: "cyan", warn: "yellow" });
 
 exports.logger = logger;
+
+exports.loggingFormatter = (header, body) => {
+  let result = `${header} - `;
+
+  for (const key in body) {
+    result += `${key}: ${body[key]}, `;
+  }
+
+  return result;
+};

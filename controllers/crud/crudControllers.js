@@ -1,8 +1,12 @@
 const { Op } = require("sequelize");
+const { logger, loggingFormatter } = require("../../handlers/logger");
+const { CustomError } = require("../../handlers/errorHandlers");
 
 exports.getOne = (model) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
+
+  if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
   const record = await model.findOne({
     where: { [Op.and]: [{ userId }, { id }, { isDeleted: false }] },
@@ -18,15 +22,13 @@ exports.getOne = (model) => async (req, res) => {
     },
   });
 
-  if (!record) {
-    res.status(404).json({ message: "record.notFound" });
-  }
-
   res.status(200).json({ data: record });
 };
 
 exports.getMany = (model, sortOrder) => async (req, res) => {
   const { id: userId } = req.token.data;
+
+  if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
   const records = await model.findAll({
     where: { [Op.and]: [{ userId }, { isDeleted: false }] },
@@ -36,28 +38,26 @@ exports.getMany = (model, sortOrder) => async (req, res) => {
     order: [sortOrder],
   });
 
-  if (!records) {
-    res.status(404).json({ message: "record.notFound" });
-  }
-
   res.status(200).json({ data: records });
 };
 
 exports.createOne = (model) => async (req, res) => {
   const { id: userId } = req.token.data;
+
+  if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
+
   const record = await model.create({ ...req.body, userId });
 
-  if (!record) {
-    res.status(404).json({ message: "record.notFound" });
-  }
+  logger.info(loggingFormatter("Record created", req.body, userId));
 
   res.status(201).json({ data: record });
 };
 
 exports.updateOne = (model, sortOrder) => async (req, res) => {
   const id = req.params.id;
-
   const { id: userId } = req.token.data;
+
+  if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
   const record = await model.update(req.body, {
     where: { [Op.and]: [{ id }, { userId }] },
@@ -65,9 +65,7 @@ exports.updateOne = (model, sortOrder) => async (req, res) => {
     plain: true,
   });
 
-  if (!record) {
-    res.status(404).json({ message: "record.notFound" });
-  }
+  logger.info(loggingFormatter("Record updated", record[1].dataValues));
 
   const records = await model.findAll({
     where: { [Op.and]: [{ userId }, { isDeleted: false }] },
@@ -84,8 +82,12 @@ exports.updateOrCreate = (model, sortOrder) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
 
+  if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
+
   if (id === "undefined") {
     const record = await model.create({ ...req.body, userId });
+
+    logger.info(loggingFormatter("Record Created", record.dataValues));
 
     const records = await model.findAll({
       where: { [Op.and]: [{ userId }, { isDeleted: false }] },
@@ -104,10 +106,7 @@ exports.updateOrCreate = (model, sortOrder) => async (req, res) => {
       plain: true,
     });
 
-    if (!record) {
-      res.status(404).json({ message: "record.notFound" });
-      return;
-    }
+    logger.info(loggingFormatter("Record Updated", record[1].dataValues));
 
     const records = await model.findAll({
       where: { [Op.and]: [{ userId }, { isDeleted: false }] },
@@ -124,6 +123,8 @@ exports.updateOrCreate = (model, sortOrder) => async (req, res) => {
 exports.deleteOne = (model, sortOrder) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
+
+  if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
   const record = await model.update(
     { isDeleted: true },
@@ -142,9 +143,7 @@ exports.deleteOne = (model, sortOrder) => async (req, res) => {
     order: [sortOrder] || [["createdAt", "ASC"]],
   });
 
-  if (!record) {
-    res.status(404).json({ message: "record.notFound" });
-  }
+  logger.info(loggingFormatter("Record Flagged Deleted", record[1].dataValues));
 
   res.status(200).json({ data: recordsWithRecordRemoved, deleted: record[1] });
 };
