@@ -1,12 +1,16 @@
 const { Shared } = require("../db");
 const { crudControllers } = require("./crud/crudControllers");
+const { logger, loggingFormatter } = require("../../handlers/logger");
 
 module.exports = {
   ...crudControllers(Shared, ["createdAt", "ASC"]),
+
   async updateShared(req, res) {
     const { id: userId } = req.token.data;
 
-    const record = await Shared.update(req.body, { where: { userId } });
+    await Shared.update(req.body, { where: { userId } });
+
+    logger.info(loggingFormatter("Record Updated", record[1].dataValues));
 
     const records = await Shared.findAll();
 

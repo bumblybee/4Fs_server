@@ -4,6 +4,7 @@ const { PracticeWeek } = require("../db");
 const { PracticeStore } = require("../db");
 const { Op } = require("sequelize");
 const moment = require("moment");
+const { logger, loggingFormatter } = require("../../handlers/logger");
 
 module.exports = {
   ...crudControllers(Practice, ["createdAt", "ASC"]),
@@ -45,6 +46,8 @@ module.exports = {
 
       await PracticeStore.create({ practice: req.body.practice, userId });
 
+      logger.info(loggingFormatter("Record Created", record.dataValues));
+
       const records = await queryCurrentPractices(userId, ["createdAt", "ASC"]);
 
       res.status(201).json({ newRecord: record, data: records });
@@ -72,10 +75,7 @@ module.exports = {
           });
         }
 
-        if (!record) {
-          res.status(404).json({ message: "record.notFound" });
-          return;
-        }
+        logger.info(loggingFormatter("Record Updated", record[1].dataValues));
       }
 
       const records = await queryCurrentPractices(userId, ["id", "ASC"]);
@@ -104,6 +104,10 @@ module.exports = {
 
     if (deletedRecord) {
       // Find practiceStore record with same title and flag deleted
+      logger.info(
+        loggingFormatter("Record Flagged Deleted", deletedRecord[1].dataValues)
+      );
+
       await PracticeStore.update(
         { isDeleted: true },
         {

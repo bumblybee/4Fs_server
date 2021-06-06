@@ -1,6 +1,8 @@
 const { crudControllers } = require("./crud/crudControllers");
 const { Fasting } = require("../db");
 const { Op } = require("sequelize");
+const { logger, loggingFormatter } = require("../handlers/logger");
+const { CustomError } = require("../handlers/errorHandlers");
 
 module.exports = {
   ...crudControllers(Fasting, ["date", "DESC"]),
@@ -8,12 +10,16 @@ module.exports = {
   async upsertFasting(req, res) {
     const { id: userId } = req.token.data;
 
+    if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
+
     const origRecord = await Fasting.findOne({
       where: { [Op.and]: [{ userId }, { date: req.body.date }] },
     });
 
     if (!origRecord) {
       const record = await Fasting.create({ ...req.body, userId });
+
+      logger.info(loggingFormatter("Record Created", record.dataValues));
 
       const records = await queryFastingRecords(userId);
 
@@ -26,10 +32,7 @@ module.exports = {
         plain: true,
       });
 
-      if (!record) {
-        res.status(404).json({ message: "record.notFound" });
-        return;
-      }
+      logger.info(loggingFormatter("Record Updated", record[1].dataValues));
 
       const records = await queryFastingRecords(userId);
 

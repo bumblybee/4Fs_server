@@ -48,7 +48,7 @@ exports.createOne = (model) => async (req, res) => {
 
   const record = await model.create({ ...req.body, userId });
 
-  logger.info(loggingFormatter("Record created", req.body, userId));
+  logger.info(loggingFormatter("Record Created", record.dataValues));
 
   res.status(201).json({ data: record });
 };
