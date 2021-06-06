@@ -4,6 +4,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
+const compression = require("compression");
 const errorHandlers = require("./handlers/errorHandlers");
 const { isAuth } = require("./middleware/isAuth");
 const { authRole } = require("./middleware/authRole");
@@ -36,6 +37,7 @@ app.use(
 );
 
 app.use(helmet());
+app.use(compression());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
