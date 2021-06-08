@@ -50,7 +50,7 @@ exports.getUser = async (id) => {
   if (user) {
     return user;
   } else {
-    throw new CustomError("auth.invalidCredentials", "userError", 401);
+    throw new CustomError("user.unauthorized", "userError", 401);
   }
 };
 

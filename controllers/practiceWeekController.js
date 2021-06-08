@@ -20,7 +20,7 @@ exports.setNewWeek = async (req, res) => {
     });
 
     const record = await PracticeWeek.create(
-      // Include last practices in current week creation
+      // When new week created, also create week's practices using stored practices
       { startDate, endDate, userId, practices: storedPractices },
       { include: [Practice] }
     );
@@ -42,7 +42,7 @@ exports.getCurrentWeek = async (req, res) => {
   const week = await PracticeWeek.findAll({
     limit: 1,
     where: {
-      [Op.and]: [{ endDate: { [Op.gt]: currDate }, isDeleted: false, userId }],
+      [Op.and]: [{ endDate: { [Op.gte]: currDate }, isDeleted: false, userId }],
     },
     order: [["createdAt", "DESC"]],
     include: Practice,

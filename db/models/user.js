@@ -8,11 +8,21 @@ module.exports = (sequelize, DataTypes) => {
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
+        set(value) {
+          const normalizedName =
+            value.trim().charAt(0).toUpperCase() + value.slice(1);
+          this.setDataValue("firstName", normalizedName);
+        },
         field: "first_name",
       },
       lastName: {
         type: DataTypes.STRING,
         allowNull: false,
+        set(value) {
+          const normalizedName =
+            value.trim().charAt(0).toUpperCase() + value.slice(1);
+          this.setDataValue("lastName", normalizedName);
+        },
         field: "last_name",
       },
       email: {
