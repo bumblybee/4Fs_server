@@ -8,13 +8,11 @@ module.exports = {
   async updateShared(req, res) {
     const { id: userId } = req.token.data;
 
-    await Shared.update(req.body, { where: { userId } });
+    const record = await Shared.update(req.body, { where: { userId } });
 
-    logger.info(
-      loggingFormatter("Shared Record Updated", record[1].dataValues)
-    );
+    logger.info(loggingFormatter("Shared Record Updated", record));
 
-    const records = await Shared.findAll();
+    const records = await Shared.findAll({ where: { userId } });
 
     res.status(200).json({ data: records });
   },

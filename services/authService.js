@@ -147,7 +147,7 @@ exports.checkIfUserEmailExists = async (email) => {
   if (!userRecord) {
     return false;
   } else {
-    throw new CustomError("auth.existingCredentials", "SignupError", 401);
+    throw new CustomError("auth.existingCredentials", "SignupError", 409);
   }
 };
 

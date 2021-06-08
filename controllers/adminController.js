@@ -1,7 +1,5 @@
 const { User } = require("../db");
 
-//TODO: custom errors
-
 exports.getUsers = async (req, res) => {
   const users = await User.findAll({ where: { isDeleted: false } });
 
