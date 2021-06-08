@@ -119,7 +119,7 @@ exports.loginUser = async (user) => {
 
   // Handle incorrect password
   if (!correctPassword) {
-    throw new Error("auth.invalidCredentials", "LoginError", 401);
+    throw new CustomError("auth.invalidCredentials", "LoginError", 401);
   }
 
   const jwt = this.generateJWT(userRecord);
