@@ -91,7 +91,7 @@ const calculateHoursSlept = (wokeUp, toBed) => {
 
     const duration = moment.duration(woke.diff(slept));
 
-    timeSlept = moment.utc(+duration).format("hh:mm");
+    timeSlept = `${duration.hours()}:${duration.minutes()}`;
   }
 
   return timeSlept;
