@@ -1,7 +1,6 @@
 const nodemailer = require("nodemailer");
 const ejs = require("ejs");
 const juice = require("juice");
-
 const { CustomError } = require("../handlers/errorHandlers");
 
 const transport = nodemailer.createTransport({
@@ -41,6 +40,10 @@ exports.sendEmail = async (options) => {
 
     return transport.sendMail(mailOptions);
   } catch (err) {
-    console.log(err);
+    throw new CustomError(
+      "passwordResetEmail.failure",
+      "PasswordResetEmailError",
+      500
+    );
   }
 };
