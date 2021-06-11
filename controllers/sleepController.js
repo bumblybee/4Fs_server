@@ -14,6 +14,9 @@ module.exports = {
     if (id === "undefined") {
       req.body.hoursSlept = calculateHoursSlept(req.body.woke, req.body.toBed);
 
+      // This is just a temp fix for needing to refactor client so doesn't call api unless all data values exist
+      if (req.body.hoursSlept === null) req.body.hoursSlept = "00:00";
+
       const record = await Sleep.create({ ...req.body, userId });
 
       logger.info(loggingFormatter("Sleep Record Created", record.dataValues));
@@ -82,7 +85,6 @@ module.exports = {
 
 const calculateHoursSlept = (wokeUp, toBed) => {
   let timeSlept = null;
-
   if (wokeUp && toBed) {
     const slept = moment(toBed, "HH:mm");
     const woke = moment(wokeUp, "HH:mm");

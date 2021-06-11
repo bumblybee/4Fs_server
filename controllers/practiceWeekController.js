@@ -12,24 +12,24 @@ exports.setNewWeek = async (req, res) => {
 
   // Safety measure - check if start date >= today before creating record. Comment out to add past weeks for testing.
   if (validDate) {
-  const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
+    const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
 
-  const storedPractices = await PracticeStore.findAll({
-    where: { [Op.and]: [{ userId }, { isDeleted: false }] },
-    attributes: ["practice", "userId"],
-  });
+    const storedPractices = await PracticeStore.findAll({
+      where: { [Op.and]: [{ userId }, { isDeleted: false }] },
+      attributes: ["practice", "userId"],
+    });
 
-  const record = await PracticeWeek.create(
-    // When new week created, also create week's practices using stored practices
-    { startDate, endDate, userId, practices: storedPractices },
-    { include: [Practice] }
-  );
+    const record = await PracticeWeek.create(
+      // When new week created, also create week's practices using stored practices
+      { startDate, endDate, userId, practices: storedPractices },
+      { include: [Practice] }
+    );
 
-  logger.info(
-    loggingFormatter("System Week Record Created", record.dataValues)
-  );
+    logger.info(
+      loggingFormatter("System Week Record Created", record.dataValues)
+    );
 
-  res.status(201).json({ data: record });
+    res.status(201).json({ data: record });
   } else {
     throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
   }
