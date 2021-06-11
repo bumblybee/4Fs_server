@@ -10,6 +10,10 @@ module.exports = {
   async upsertFasting(req, res) {
     const { id: userId } = req.token.data;
 
+    logger.info(
+      loggingFormatter("Fasting Upsert Initiated at upsertFasting", req.body)
+    );
+
     if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
     const origRecord = await Fasting.findOne({

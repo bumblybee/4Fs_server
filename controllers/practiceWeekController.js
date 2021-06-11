@@ -10,6 +10,10 @@ exports.setNewWeek = async (req, res) => {
   const currDate = moment().format("YYYY-MM-DD");
   const validDate = moment(startDate).isSameOrAfter(currDate);
 
+  logger.info(
+    loggingFormatter("New Week Flow Initiated at setNewWeek", req.body)
+  );
+
   // Safety measure - check if start date >= today before creating record. Comment out to add past weeks for testing.
   if (validDate) {
     const endDate = moment(startDate).add(6, "days").format("YYYY-MM-DD");
@@ -31,6 +35,13 @@ exports.setNewWeek = async (req, res) => {
 
     res.status(201).json({ data: record });
   } else {
+    logger.error(
+      loggingFormatter("New Week Creation Failed: Invalid date", {
+        userId,
+        startDate,
+      })
+    );
+
     throw new CustomError("practices.invalidDate", "PracticeWeekError", 400);
   }
 };
@@ -38,6 +49,8 @@ exports.setNewWeek = async (req, res) => {
 exports.getCurrentWeek = async (req, res) => {
   const { id: userId } = req.token.data;
   const currDate = moment().format("YYYY-MM-DD");
+
+  logger.info(loggingFormatter("Get Request at getCurrentWeek", { userId }));
 
   const week = await PracticeWeek.findAll({
     limit: 1,
@@ -54,9 +67,15 @@ exports.getCurrentWeek = async (req, res) => {
 exports.deleteCurrentWeek = async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
-  console.log("hit");
-  //delete user's practice records associated with week
 
+  logger.info(
+    loggingFormatter("System Week Deletion Initiated at deleteCurrentWeek", {
+      recordId: id,
+      userId,
+    })
+  );
+
+  //delete user's practice records associated with week
   const deletedWeek = await PracticeWeek.update(
     { isDeleted: true },
     {
@@ -90,6 +109,8 @@ exports.deleteCurrentWeek = async (req, res) => {
 exports.getProgressWeeks = async (req, res) => {
   const { id: userId } = req.token.data;
   const currDate = moment().format("YYYY-MM-DD");
+
+  logger.info(loggingFormatter("Get Request at getProgressWeeks", { userId }));
 
   const week = await PracticeWeek.findAll({
     where: {

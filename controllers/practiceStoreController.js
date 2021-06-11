@@ -15,6 +15,13 @@ module.exports = {
     const id = req.params.id;
     const { id: userId } = req.token.data;
 
+    logger.info(
+      loggingFormatter(
+        "Practice Store Upsert Initiated at upsertStoredPractice",
+        req.body
+      )
+    );
+
     // If no id, record doesn't already exist = create
     if (id === "undefined") {
       const record = await PracticeStore.create({ ...req.body, userId });

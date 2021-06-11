@@ -11,6 +11,10 @@ module.exports = {
 
   async getCurrentPractices(req, res) {
     const { id: userId } = req.token.data;
+    logger.info(
+      loggingFormatter("Get Initiated at getCurrentPractices", { userId })
+    );
+
     const records = await queryCurrentPractices(userId, ["id", "ASC"]);
 
     res.status(200).json({ data: records });
@@ -20,6 +24,9 @@ module.exports = {
     const { id: userId } = req.token.data;
     const currDate = moment().format("YYYY-MM-DD");
 
+    logger.info(
+      loggingFormatter("Get Initiated at getPracticeProgress", { userId })
+    );
     // Get practice records where PracticeWeek endDate prior to today
     const records = await Practice.findAll({
       where: { userId, isDeleted: false },
@@ -39,6 +46,10 @@ module.exports = {
   async upsertPractice(req, res) {
     const id = req.params.id;
     const { id: userId } = req.token.data;
+
+    logger.info(
+      loggingFormatter("Practice Upsert Initiated at upsertPractice", req.body)
+    );
 
     // If no id, record doesn't already exist = create
     if (id === "undefined") {
@@ -91,6 +102,13 @@ module.exports = {
   async deletePractice(req, res) {
     const id = req.params.id;
     const { id: userId } = req.token.data;
+
+    logger.info(
+      loggingFormatter("Practice Deletion Initiated at deletePractice", {
+        recordId: id,
+        userId,
+      })
+    );
 
     const origRecord = await Practice.findOne({
       where: { id },
