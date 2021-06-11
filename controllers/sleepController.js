@@ -11,6 +11,10 @@ module.exports = {
     const id = req.params.id;
     const { id: userId } = req.token.data;
 
+    logger.info(
+      loggingFormatter("Sleep Upsert Initiated at upsertSleep", req.body)
+    );
+
     if (id === "undefined") {
       req.body.hoursSlept = calculateHoursSlept(req.body.woke, req.body.toBed);
 

@@ -8,6 +8,8 @@ module.exports = {
   async updateShared(req, res) {
     const { id: userId } = req.token.data;
 
+    logger.info(loggingFormatter("Shared Update Initiated", { userId }));
+
     const record = await Shared.update(req.body, { where: { userId } });
 
     logger.info(loggingFormatter("Shared Record Updated", record));
