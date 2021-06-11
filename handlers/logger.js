@@ -24,8 +24,10 @@ exports.logger = logger;
 exports.loggingFormatter = (header, body) => {
   let result = `${header} - `;
 
-  for (const key in body) {
-    result += `${key}: ${body[key]}, `;
+  if (body) {
+    for (const key in body) {
+      result += `${key}: ${body[key]}, `;
+    }
   }
 
   return result;

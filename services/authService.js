@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const argon2 = require("argon2");
 const crypto = require("crypto");
 const { Op } = require("sequelize");
-const { logger } = require("../handlers/logger");
+const { logger, loggingFormatter } = require("../handlers/logger");
 const { RESET_PASSWORD_URL } = require("../config/passwordResetConfig");
 const { Milestone } = require("../db");
 const { Shared } = require("../db");
@@ -55,12 +55,16 @@ exports.getUser = async (id) => {
 };
 
 exports.signupUser = async (user) => {
-  const { email, password } = user;
+  const { firstName, lastName, email, password } = user;
   const existingCredentials = await User.findOne({
     where: { email },
   });
 
   if (existingCredentials) {
+    logger.warn(
+      `Signup Failure: User record already exists - user id: ${existingCredentials.id}, name: ${existingCredentials.firstName} ${existingCredentials.lastName}, email: ${existingCredentials.email}`
+    );
+
     throw new CustomError("auth.existingCredentials", "SignupError", 401);
   } else {
     const hash = await argon2.hash(password);
@@ -100,6 +104,10 @@ exports.signupUser = async (user) => {
 
       return { jwt, userData, createdMilestones };
     } else {
+      logger.error(
+        `User Sign Up Failed - name: ${firstName} ${lastName}, email: ${email}`
+      );
+
       throw new CustomError("auth.failedSignup", "SignupError", 401);
     }
   }
@@ -112,6 +120,8 @@ exports.loginUser = async (user) => {
 
   if (!userRecord) {
     // Handle login failure
+    logger.warn(`User Login Failed: No User Record - email: ${email}`);
+
     throw new CustomError("auth.invalidCredentials", "LoginError", 401);
   }
 
@@ -119,6 +129,10 @@ exports.loginUser = async (user) => {
 
   // Handle incorrect password
   if (!correctPassword) {
+    logger.error(
+      `User Login Failed: Incorrect Password - user id: ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName}, email: ${userRecord.email}, admin: ${userRecord.isAdmin}}`
+    );
+
     throw new CustomError("auth.invalidCredentials", "LoginError", 401);
   }
 
@@ -145,33 +159,41 @@ exports.checkIfUserEmailExists = async (email) => {
   const userRecord = await User.findOne({ where: { email } });
 
   if (!userRecord) {
+    logger.info(`User Signup: Email Available: email: ${email}`);
+
     return false;
   } else {
+    logger.warn(
+      `User Email Already Exists - user id: ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName}, email: ${userRecord.email}`
+    );
+
     throw new CustomError("auth.existingCredentials", "SignupError", 409);
   }
 };
 
-exports.updateUser = async (id, changes) => {
+exports.updateUser = async (id, data) => {
   const userRecord = await User.findOne({ where: { id } });
 
   if (!userRecord) {
     // Handle login failure
+    logger.warn(loggingFormatter("User Update Failed: No user record", data));
+
     throw new CustomError("auth.userNotFound", "userError", 403);
   }
 
-  const record = await User.update(changes, {
+  const record = await User.update(data, {
     where: { id },
     returning: true,
     plain: true,
   });
 
   if (!record) {
+    logger.error(loggingFormatter("User Update Failed", data));
+
     throw new Error("auth.userNotFound", "userError", 403);
   }
 
-  logger.info(
-    `User Data Updated - user id: ${id}, name: ${record[1].firstName} ${record[1].lastName}, email: ${record[1].email}, admin: ${record[1].isAdmin}`
-  );
+  logger.info(loggingFormatter("User Record Updated", data));
 
   const userData = {
     firstName: record[1].firstName,
@@ -189,7 +211,7 @@ exports.updateUser = async (id, changes) => {
 };
 
 exports.generatePasswordReset = async (email) => {
-  logger.info(`Password reset initiated for ${email}`);
+  logger.info(`Password reset request initiated for ${email}`);
 
   const userRecord = await User.findOne({ where: { email } });
 
@@ -225,6 +247,8 @@ exports.generatePasswordReset = async (email) => {
 };
 
 exports.passwordReset = async (token, password) => {
+  logger.info("Password Reset Initiated");
+
   const userRecord = await User.findOne({
     where: {
       resetPasswordToken: token,
@@ -241,6 +265,8 @@ exports.passwordReset = async (token, password) => {
       `Password Reset Successful - user id ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName} email: ${userRecord.email}`
     );
   } else {
+    logger.error("PasswordReset Failed - no matching token");
+
     throw new CustomError("auth.noToken", "PasswordResetError", 401);
   }
 

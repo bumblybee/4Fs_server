@@ -1,6 +1,5 @@
 const authService = require("../services/authService");
 const { COOKIE_CONFIG } = require("../config/cookieConfig");
-const { logger } = require("../handlers/logger");
 
 exports.getCurrentUser = async (req, res) => {
   const { id } = req.token.data;
