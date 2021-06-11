@@ -10,7 +10,7 @@ exports.getCurrentUser = async (req, res) => {
   if (user) {
     res.json({ user });
   } else {
-    res.status(401).json({ code: "user.unauthorized" });
+    res.status(401).json({ error: "user.unauthorized" });
   }
 };
 

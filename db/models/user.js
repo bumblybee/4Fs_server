@@ -47,22 +47,18 @@ module.exports = (sequelize, DataTypes) => {
       },
       age: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         field: "age",
       },
       weight: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         field: "weight",
       },
       height: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         field: "height",
       },
       gender: {
         type: DataTypes.STRING,
-        allowNull: false,
         field: "gender",
       },
       sheetsURL: {
