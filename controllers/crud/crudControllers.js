@@ -6,6 +6,8 @@ exports.getOne = (model) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
 
+  logger.info(`Get request at getOne - user id: ${userId} `);
+
   if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
   const record = await model.findOne({
@@ -22,11 +24,15 @@ exports.getOne = (model) => async (req, res) => {
     },
   });
 
+  logger.info(`Record Query Successful at getOne - user id: ${userId} `);
+
   res.status(200).json({ data: record });
 };
 
 exports.getMany = (model, sortOrder) => async (req, res) => {
   const { id: userId } = req.token.data;
+
+  logger.info(`Get Request at getMany - user id: ${userId} `);
 
   if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
@@ -38,11 +44,17 @@ exports.getMany = (model, sortOrder) => async (req, res) => {
     order: [sortOrder],
   });
 
+  logger.info(`Record Query Successful at getMany - user id: ${userId} `);
+
   res.status(200).json({ data: records });
 };
 
 exports.createOne = (model) => async (req, res) => {
   const { id: userId } = req.token.data;
+
+  logger.info(
+    loggingFormatter("Record Creation Initiated at createOne", req.body)
+  );
 
   if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
@@ -57,6 +69,10 @@ exports.updateOne = (model, sortOrder) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
 
+  logger.info(
+    loggingFormatter("Record Update Initiated at updateOne", req.body)
+  );
+
   if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
   const record = await model.update(req.body, {
@@ -65,7 +81,9 @@ exports.updateOne = (model, sortOrder) => async (req, res) => {
     plain: true,
   });
 
-  logger.info(loggingFormatter("Record updated", record[1].dataValues));
+  logger.info(
+    loggingFormatter("Record Updated at updateOne", record[1].dataValues)
+  );
 
   const records = await model.findAll({
     where: { [Op.and]: [{ userId }, { isDeleted: false }] },
@@ -81,6 +99,10 @@ exports.updateOne = (model, sortOrder) => async (req, res) => {
 exports.updateOrCreate = (model, sortOrder) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
+
+  logger.info(
+    loggingFormatter("Record Upsert Initiated at updateOrCreate", req.body)
+  );
 
   if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
@@ -123,6 +145,13 @@ exports.updateOrCreate = (model, sortOrder) => async (req, res) => {
 exports.deleteOne = (model, sortOrder) => async (req, res) => {
   const id = req.params.id;
   const { id: userId } = req.token.data;
+
+  logger.info(
+    loggingFormatter("Record Deletion Initiated at deleteOne", {
+      recordId: id,
+      userId,
+    })
+  );
 
   if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
 
