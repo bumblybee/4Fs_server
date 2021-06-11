@@ -63,7 +63,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       sheetsURL: {
         type: DataTypes.STRING,
-        unique: true,
         validate: {
           isURL: {
             msg: "user.invalidSheetsURL",
