@@ -6,7 +6,7 @@ const { errorWrapper } = require("../handlers/errorHandlers");
 router
   .route("/")
   .get(controllers.getMany)
-  .post(errorWrapper(controllers.createOne));
+  .post(errorWrapper(controllers.createSleep));
 
 router
   .route("/:id")

@@ -62,7 +62,14 @@ exports.createOne = (model) => async (req, res) => {
 
   logger.info(loggingFormatter("Record Created", record.dataValues));
 
-  res.status(201).json({ data: record });
+  const records = await model.findAll({
+    where: { [Op.and]: [{ userId }, { isDeleted: false }] },
+    attributes: {
+      exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
+    },
+  });
+
+  res.status(201).json({ updatedRecord: record[1], data: records });
 };
 
 exports.updateOne = (model, sortOrder) => async (req, res) => {
@@ -180,7 +187,7 @@ exports.deleteOne = (model, sortOrder) => async (req, res) => {
 exports.crudControllers = (model, getOrder, updateOrder, deleteOrder) => ({
   getOne: this.getOne(model),
   getMany: this.getMany(model, getOrder),
-  createOne: this.createOne(model),
+  createOne: this.createOne(model, getOrder),
   updateOne: this.updateOne(model, updateOrder),
   updateOrCreate: this.updateOrCreate(model, updateOrder),
   deleteOne: this.deleteOne(model, deleteOrder),

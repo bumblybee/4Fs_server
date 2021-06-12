@@ -7,6 +7,35 @@ const { logger, loggingFormatter } = require("../handlers/logger");
 module.exports = {
   ...crudControllers(Sleep, ["date", "ASC"], null, ["date", "ASC"]),
 
+  async createSleep(req, res) {
+    const { id: userId } = req.token.data;
+
+    logger.info(
+      loggingFormatter(
+        "Sleep Record Creation Initiated at createSleep",
+        req.body
+      )
+    );
+
+    if (!userId) throw new CustomError("user.unauthorized", "UserError", 401);
+
+    req.body.hoursSlept = calculateHoursSlept(req.body.woke, req.body.toBed);
+
+    const record = await Sleep.create({ ...req.body, userId });
+
+    logger.info(loggingFormatter("Sleep Record Created", record.dataValues));
+
+    const records = await Sleep.findAll({
+      where: { [Op.and]: [{ userId }, { isDeleted: false }] },
+      attributes: {
+        exclude: ["userId", "isDeleted", "createdAt", "updatedAt", "deletedAt"],
+      },
+      order: [["date", "ASC"]],
+    });
+
+    res.status(201).json({ updatedRecord: record[1], data: records });
+  },
+
   async upsertSleep(req, res) {
     const id = req.params.id;
     const { id: userId } = req.token.data;
@@ -17,9 +46,6 @@ module.exports = {
 
     if (id === "undefined") {
       req.body.hoursSlept = calculateHoursSlept(req.body.woke, req.body.toBed);
-
-      // This is just a temp fix for needing to refactor client so doesn't call api unless all data values exist
-      if (req.body.hoursSlept === null) req.body.hoursSlept = "00:00";
 
       const record = await Sleep.create({ ...req.body, userId });
 
@@ -44,7 +70,7 @@ module.exports = {
     } else {
       const originalRecord = await Sleep.findOne({ where: { id } });
 
-      // Below handles updating hoursSlept -  make more readable
+      // Below handles updating hoursSlept based on whether user updated woke or toBed
       if (req.body.woke) {
         req.body.hoursSlept = calculateHoursSlept(
           req.body.woke,
@@ -88,7 +114,7 @@ module.exports = {
 };
 
 const calculateHoursSlept = (wokeUp, toBed) => {
-  let timeSlept = null;
+  let timeSlept = "00:00";
   if (wokeUp && toBed) {
     const slept = moment(toBed, "HH:mm");
     const woke = moment(wokeUp, "HH:mm");
