@@ -74,12 +74,15 @@ exports.resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
 
-  const { userRecord } = await authService.passwordReset(token, password);
+  const { jwt, userRecord } = await authService.passwordReset(token, password);
+
+  res.cookie("_4fs", jwt, COOKIE_CONFIG);
 
   res.json({
     message: "Password Updated",
     id: userRecord.id,
     email: userRecord.email,
-    username: userRecord.username,
+    firstName: userRecord.firstName,
+    lastName: userRecord.lastName,
   });
 };

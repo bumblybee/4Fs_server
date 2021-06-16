@@ -261,14 +261,16 @@ exports.passwordReset = async (token, password) => {
 
     await userRecord.update({ password: hashedPassword });
 
+    const jwt = this.generateJWT(userRecord);
+
     logger.info(
       `Password Reset Successful - user id ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName} email: ${userRecord.email}`
     );
+
+    return { jwt, userRecord };
   } else {
     logger.error("PasswordReset Failed - no matching token");
 
     throw new CustomError("auth.noToken", "PasswordResetError", 401);
   }
-
-  return { userRecord };
 };
