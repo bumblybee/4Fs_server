@@ -32,7 +32,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://four-fs.herokuapp.com",
-      "https://4fs-member-portal.netlify.app/",
+      "https://4fs-member-portal.netlify.app",
     ],
 
     credentials: true,
