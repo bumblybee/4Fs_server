@@ -29,7 +29,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://four-fs.herokuapp.com"],
+    origin: [
+      "http://localhost:3000",
+      "https://four-fs.herokuapp.com",
+      "https://4fs-member-portal.netlify.app/",
+    ],
 
     credentials: true,
   })
