@@ -1,18 +1,18 @@
-const nodemailer = require("nodemailer");
 const ejs = require("ejs");
 const juice = require("juice");
+const fs = require("fs");
+const path = require("path");
 const { CustomError } = require("../handlers/errorHandlers");
 const sgMail = require("@sendgrid/mail");
 
-const transport = nodemailer.createTransport({
-  service: "SendGrid",
-  host: process.env.SENDGRID_HOST,
-  port: process.env.SENDGRID_PORT,
-  auth: {
-    user: process.env.SENDGRID_USER,
-    pass: process.env.API_KEY,
-  },
-});
+function base64_encode(file) {
+  var bitmap = fs.readFileSync(
+    path.resolve(__dirname, "../public/assets/" + file),
+    { encoding: "base64" }
+  );
+
+  return bitmap.toString("base64");
+}
 
 const generateHTML = async (filename, options) => {
   const html = await ejs.renderFile(
@@ -28,8 +28,11 @@ exports.sendEmail = async (options) => {
   try {
     const html = await generateHTML(options.filename, options);
 
+    // SendGrid requires base64 string for inline images
+    const content = base64_encode("4flogo.png");
+
     const mailOptions = {
-      from: "4F's of Weight Loss <hesstjune@gmail.com>",
+      from: "4Fs of Weight Loss <hesstjune@gmail.com>",
       to: options.user.email,
       subject: options.subject,
       html,
@@ -38,16 +41,16 @@ exports.sendEmail = async (options) => {
           contentType: "image/png",
           filename: "4flogo.png",
           path: "public/assets/4flogo.png",
-          content: "public/assets/4flogo.png",
-          cid: "logo",
-          disposition: "inline",
+          content,
           content_id: "logo",
+          disposition: "inline",
         },
       ],
     };
 
     return sgMail.send(mailOptions);
   } catch (err) {
+    console.log(err);
     throw new CustomError(
       "passwordResetEmail.failure",
       "PasswordResetEmailError",
