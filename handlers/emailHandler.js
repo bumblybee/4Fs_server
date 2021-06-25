@@ -38,7 +38,7 @@ exports.sendEmail = async (options) => {
           contentType: "image/png",
           filename: "4flogo.png",
           path: "public/assets/4flogo.png",
-          content: process.env.SENDGRID_IMAGE_B64,
+          content: "public/assets/4flogo.png",
           cid: "logo",
           disposition: "inline",
           content_id: "logo",
