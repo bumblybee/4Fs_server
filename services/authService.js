@@ -4,7 +4,7 @@ const argon2 = require("argon2");
 const crypto = require("crypto");
 const { Op } = require("sequelize");
 const { logger, loggingFormatter } = require("../handlers/logger");
-const { RESET_PASSWORD_URL } = require("../config/passwordResetConfig");
+// const { RESET_PASSWORD_URL } = require("../config/passwordResetConfig");
 const { Milestone } = require("../db");
 const { Shared } = require("../db");
 const emailHandler = require("../handlers/emailHandler");
@@ -231,7 +231,7 @@ exports.generatePasswordReset = async (email) => {
       `Password Reset Request - user id: ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName}, email: ${userRecord.email}, admin: ${userRecord.isAdmin}`
     );
 
-    const resetPasswordUrl = `${RESET_PASSWORD_URL}/${resetToken}`;
+    const resetPasswordUrl = `${process.env.RESET_PASSWORD_URL}/${resetToken}`;
 
     await emailHandler.sendEmail({
       subject: "Request to Reset your Password",
