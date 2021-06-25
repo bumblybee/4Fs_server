@@ -4,7 +4,6 @@ const argon2 = require("argon2");
 const crypto = require("crypto");
 const { Op } = require("sequelize");
 const { logger, loggingFormatter } = require("../handlers/logger");
-// const { RESET_PASSWORD_URL } = require("../config/passwordResetConfig");
 const { Milestone } = require("../db");
 const { Shared } = require("../db");
 const emailHandler = require("../handlers/emailHandler");
@@ -172,6 +171,8 @@ exports.checkIfUserEmailExists = async (email) => {
 };
 
 exports.updateUser = async (id, data) => {
+  logger.info(loggingFormatter("User Update initiated", data));
+
   const userRecord = await User.findOne({ where: { id } });
 
   if (!userRecord) {
@@ -179,6 +180,19 @@ exports.updateUser = async (id, data) => {
     logger.warn(loggingFormatter("User Update Failed: No user record", data));
 
     throw new CustomError("auth.userNotFound", "userError", 403);
+  }
+
+  // If email already in use, return error
+  if (data.email && data.email !== userRecord.email) {
+    const existingEmail = await User.findOne({ where: { email: data.email } });
+
+    if (existingEmail) {
+      logger.warn(
+        loggingFormatter("User Update Failed: Email already in system", data)
+      );
+
+      throw new CustomError("auth.existingEmail", "UserUpdateError", 409);
+    }
   }
 
   const record = await User.update(data, {
