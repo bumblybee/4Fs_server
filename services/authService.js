@@ -166,7 +166,7 @@ exports.checkIfUserEmailExists = async (email) => {
       `User Email Already Exists - user id: ${userRecord.id}, name: ${userRecord.firstName} ${userRecord.lastName}, email: ${userRecord.email}`
     );
 
-    throw new CustomError("auth.existingCredentials", "SignupError", 409);
+    throw new CustomError("auth.existingEmail", "SignupError", 409);
   }
 };
 
