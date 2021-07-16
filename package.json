@@ -4,7 +4,11 @@
   "private": true,
   "scripts": {
     "start": "set NODE_ENV=development&&node ./bin/www",
-    "prod-start": "set NODE_ENV=production&&node ./bin/www"
+    "prod-start": "set NODE_ENV=production&&node ./bin/www",
+    "migrate": "npx sequelize-cli db:migrate",
+    "undo-migrate": "npx sequelize-cli db:migrate:undo",
+    "seed": "npx sequelize-cli db:seed:all",
+    "undo-seed": "npx sequelize-cli db:seed:undo"
   },
   "engines": {
     "node": "12.x"

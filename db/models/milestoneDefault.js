@@ -1,8 +1,8 @@
 "use strict";
 
 module.exports = (sequelize, DataTypes) => {
-  const Milestone = sequelize.define(
-    "milestone",
+  const MilestoneDefault = sequelize.define(
+    "milestone_default",
     {
       f: {
         type: DataTypes.STRING,
@@ -17,20 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       personalize: {
         type: DataTypes.STRING,
         field: "personalize",
-      },
-      comments: {
-        type: DataTypes.STRING,
-        field: "comments",
-      },
-      status: {
-        type: DataTypes.ENUM("In Progress", "Complete"),
-        defaultValue: "In Progress",
-        field: "status",
-      },
-      isShared: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-        field: "is_shared",
       },
       isDeleted: {
         type: DataTypes.BOOLEAN,
@@ -52,11 +38,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       timestamps: true,
-      paranoid: true,
     },
 
-    { tableName: "milestone" }
+    { tableName: "milestone_default" }
   );
 
-  return Milestone;
+  return MilestoneDefault;
 };

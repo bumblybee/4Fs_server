@@ -4,12 +4,8 @@ const argon2 = require("argon2");
 const crypto = require("crypto");
 const { Op } = require("sequelize");
 const { logger, loggingFormatter } = require("../handlers/logger");
-const { Milestone } = require("../db");
-const { Shared } = require("../db");
+const { Milestone, MilestoneDefault, Shared } = require("../db");
 const emailHandler = require("../handlers/emailHandler");
-const {
-  generateUserMilestones,
-} = require("../utils/milestones/milestonesGenerator");
 const { CustomError } = require("../handlers/errorHandlers");
 
 exports.generateJWT = (user) => {
@@ -26,6 +22,28 @@ exports.generateJWT = (user) => {
   return jwt.sign({ data }, secret, {
     expiresIn: expiration,
   });
+};
+
+const mapUserIdToMilestones = (defaults, id) => {
+  return defaults.map((item) => {
+    const { f, milestone, personalize } = item;
+    const data = { f, milestone, personalize, userId: id };
+    return data;
+  });
+};
+
+const generateUserMilestones = async (userId) => {
+  const defaultMilestones = await MilestoneDefault.findAll();
+
+  const userMilestones = mapUserIdToMilestones(defaultMilestones, userId);
+
+  const createdMilestones = await Milestone.bulkCreate(userMilestones);
+
+  if (!createdMilestones.length) {
+    logger.error(`New User Milestone Generation Failed`);
+  }
+
+  return createdMilestones;
 };
 
 exports.getUser = async (id) => {
@@ -79,14 +97,23 @@ exports.signupUser = async (user) => {
     if (createdUser) {
       const jwt = this.generateJWT(createdUser);
 
-      const userMilestones = generateUserMilestones(createdUser.id);
+      logger.info(
+        `Generating new user milestones: ${createdUser.id}, name: ${createdUser.firstName} ${createdUser.lastName}, email: ${createdUser.email}, admin: ${createdUser.isAdmin}`
+      );
 
-      const createdMilestones = await Milestone.bulkCreate(...userMilestones);
+      // Generate user milestones
+      const userMilestones = await generateUserMilestones(createdUser.id);
+
+      if (!userMilestones) {
+        logger.error(
+          `New user milestone generation failed - name: ${createdUser.firstName} ${createdUser.lastName}, email: ${createdUser.email}`
+        );
+      }
 
       // Create Shared record for user
       Shared.create({ userId: createdUser.id });
 
-      // Pull password out of createdUser before sending
+      // Pull password out of createdUser before returning
       const userData = {
         firstName: createdUser.firstName,
         lastName: createdUser.lastName,
@@ -101,7 +128,7 @@ exports.signupUser = async (user) => {
         `New User Sign Up - user id: ${createdUser.id}, name: ${createdUser.firstName} ${createdUser.lastName}, email: ${createdUser.email}, admin: ${createdUser.isAdmin}`
       );
 
-      return { jwt, userData, createdMilestones };
+      return { jwt, userData };
     } else {
       logger.error(
         `User Sign Up Failed - name: ${firstName} ${lastName}, email: ${email}`

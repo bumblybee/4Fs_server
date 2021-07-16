@@ -8,6 +8,7 @@ const BeliefModel = require("./models/belief.js");
 const FastingModel = require("./models/fasting.js");
 const HabitModel = require("./models/habit.js");
 const MilestoneModel = require("./models/milestone.js");
+const MilestoneDefaultModel = require("./models/milestoneDefault.js");
 const MomentModel = require("./models/moment.js");
 const ResourceModel = require("./models/resource.js");
 const SkillModel = require("./models/skill.js");
@@ -47,6 +48,7 @@ const Belief = BeliefModel(sequelize, Sequelize);
 const Fasting = FastingModel(sequelize, Sequelize);
 const Habit = HabitModel(sequelize, Sequelize);
 const Milestone = MilestoneModel(sequelize, Sequelize);
+const MilestoneDefault = MilestoneDefaultModel(sequelize, Sequelize);
 const Moment = MomentModel(sequelize, Sequelize);
 const Resource = ResourceModel(sequelize, Sequelize);
 const Skill = SkillModel(sequelize, Sequelize);
@@ -100,6 +102,7 @@ module.exports = {
   Fasting,
   Habit,
   Milestone,
+  MilestoneDefault,
   Moment,
   Resource,
   Skill,
