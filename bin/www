@@ -42,13 +42,7 @@ db.sequelize
 
     if (forceDbReset === true) {
       console.log("~~Database reset~~");
-      // await authService.createAdminUser(
-      //   process.env.ADMIN_USERNAME,
-      //   process.env.ADMIN_EMAIL,
-      //   process.env.ADMIN_PASSWORD
-      // );
-
-      // console.log("Database seeded successfully...");
+    
     }
   })
   .catch((err) => console.log(err));

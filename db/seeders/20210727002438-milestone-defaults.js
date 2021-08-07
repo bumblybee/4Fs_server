@@ -10,6 +10,7 @@ module.exports = {
           milestone: "Define Goal, Identity, and Result.",
           personalize:
             "I (system) every day because I (name) am (new identity). My new life allows me to (enables what).",
+            // Sequelize doesn't handle created and updated automatically in seeders
           created_at: new Date(),
           updated_at: new Date(),
         },
