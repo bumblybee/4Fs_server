@@ -51,6 +51,7 @@ exports.sendEmail = async (options) => {
     return sgMail.send(mailOptions);
   } catch (err) {
     console.log(err);
+
     throw new CustomError(
       "passwordResetEmail.failure",
       "PasswordResetEmailError",
