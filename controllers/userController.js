@@ -14,7 +14,15 @@ exports.getCurrentUser = async (req, res) => {
 };
 
 exports.signupUser = async (req, res) => {
-  const { jwt, userData } = await authService.signupUser(req.body);
+  let { firstName, lastName, email, password } = req.body;
+  email = email.toLowerCase();
+
+  const { jwt, userData } = await authService.signupUser({
+    firstName,
+    lastName,
+    email,
+    password,
+  });
 
   if (userData) {
     res.cookie("_4fs", jwt, COOKIE_CONFIG);
@@ -26,7 +34,10 @@ exports.signupUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  const { jwt, userData } = await authService.loginUser(req.body);
+  let { email, password } = req.body;
+  email = email.toLowerCase();
+
+  const { jwt, userData } = await authService.loginUser({ email, password });
 
   res.cookie("_4fs", jwt, COOKIE_CONFIG);
 
@@ -44,7 +55,9 @@ exports.logoutUser = async (req, res) => {
 };
 
 exports.checkUserEmail = async (req, res) => {
-  const { email } = req.body;
+  let { email } = req.body;
+  email = email.toLowerCase();
+
   const emailExists = await authService.checkIfUserEmailExists(email);
 
   if (!emailExists) {
@@ -64,7 +77,8 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.generatePasswordResetLink = async (req, res) => {
-  const { email } = req.body;
+  let { email } = req.body;
+  email = email.toLowerCase();
 
   await authService.generatePasswordReset(email);
 
